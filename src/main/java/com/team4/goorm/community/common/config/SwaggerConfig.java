@@ -1,4 +1,4 @@
-package com.team4.goorm.community.global.config;
+package com.team4.goorm.community.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

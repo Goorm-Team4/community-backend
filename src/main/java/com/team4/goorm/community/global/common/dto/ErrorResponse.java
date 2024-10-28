@@ -1,4 +1,4 @@
-package com.team4.goorm.community.common.dto;
+package com.team4.goorm.community.global.common.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;

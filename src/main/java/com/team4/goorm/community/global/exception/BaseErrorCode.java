@@ -1,4 +1,4 @@
-package com.team4.goorm.community.common.exception;
+package com.team4.goorm.community.global.exception;
 
 import org.springframework.http.HttpStatus;
 

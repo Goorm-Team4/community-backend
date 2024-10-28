@@ -1,4 +1,4 @@
-package com.team4.goorm.community.common.exception;
+package com.team4.goorm.community.global.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -6,8 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.team4.goorm.community.Member.exception.MemberException;
-import com.team4.goorm.community.common.dto.ErrorResponse;
-import com.team4.goorm.community.common.dto.SuccessResponse;
+import com.team4.goorm.community.global.common.dto.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;
 

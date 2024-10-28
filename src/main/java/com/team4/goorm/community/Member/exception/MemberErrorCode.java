@@ -2,7 +2,7 @@ package com.team4.goorm.community.Member.exception;
 
 import org.springframework.http.HttpStatus;
 
-import com.team4.goorm.community.common.exception.BaseErrorCode;
+import com.team4.goorm.community.global.exception.BaseErrorCode;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package com.team4.goorm.community.common.domain;
+package com.team4.goorm.community.global.common.domain;
 
 import java.time.LocalDateTime;
 

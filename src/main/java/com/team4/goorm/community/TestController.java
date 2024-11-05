@@ -5,8 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team4.goorm.community.Member.exception.MemberErrorCode;
-import com.team4.goorm.community.Member.exception.MemberException;
+import com.team4.goorm.community.member.exception.MemberErrorCode;
+import com.team4.goorm.community.member.exception.MemberException;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
 
 import io.swagger.v3.oas.annotations.Operation;

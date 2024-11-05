@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import com.team4.goorm.community.Member.exception.MemberException;
+import com.team4.goorm.community.member.exception.MemberException;
 import com.team4.goorm.community.global.common.dto.ErrorResponse;
 
 import lombok.extern.slf4j.Slf4j;

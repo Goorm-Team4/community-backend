@@ -1,4 +1,4 @@
-package com.team4.goorm.community.Member.domain;
+package com.team4.goorm.community.member.domain;
 
 import com.team4.goorm.community.global.common.domain.BaseEntity;
 

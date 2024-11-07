@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.team4.goorm.community.auth.exception.AuthException;
 import com.team4.goorm.community.member.exception.MemberException;
 import com.team4.goorm.community.global.common.dto.ErrorResponse;
+import com.team4.goorm.community.post.exception.PostException;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -16,7 +18,21 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MemberException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleMemberException(MemberException e) {
-		log.warn(e.getMessage(), e);
+		log.warn("Member Exception: ", e.getMessage(), e);
+
+		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
+	}
+
+	@ExceptionHandler(AuthException.class)
+	public ResponseEntity<ErrorResponse<Void>> handleAuthException(AuthException e) {
+		log.warn("Auth Exception: ", e.getMessage(), e);
+
+		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
+	}
+
+	@ExceptionHandler(PostException.class)
+	public ResponseEntity<ErrorResponse<Void>> handlePostException(PostException e) {
+		log.warn("Post Exception: ", e.getMessage(), e);
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}

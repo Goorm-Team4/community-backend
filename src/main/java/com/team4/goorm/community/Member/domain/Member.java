@@ -39,7 +39,6 @@ public class Member extends BaseEntity {
 	@Column(nullable = false)
 	private String username;
 
-	@Size(min = 8, max = 20)
 	private String password;
 
 	@Column(name = "profile_image_url")
@@ -55,5 +54,9 @@ public class Member extends BaseEntity {
 		this.username = username;
 		this.password = password;
 		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void setEncryptedPassword(String password) {
+		this.password = password;
 	}
 }

@@ -17,7 +17,7 @@ public enum JwtErrorCode implements BaseErrorCode {
 	ACCESS_DENIED(HttpStatus.FORBIDDEN, "JWT_403_0", "해당 요청에 대한 접근 권한이 없습니다."),
 	JWT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "JWT_500_0", "JWT 에러가 발생하였습니다.");
 
-	private final HttpStatus httpStatus;
+	private final HttpStatus status;
 	private final String code;
 	private final String message;
 }

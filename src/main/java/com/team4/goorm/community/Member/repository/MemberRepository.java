@@ -7,6 +7,7 @@ import com.team4.goorm.community.member.domain.Member;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
 
+	boolean existsByEmail(String email);
 	Optional<Member> findByEmail(String email);
 	Optional<Member> findBySocialId(String socialId);
 

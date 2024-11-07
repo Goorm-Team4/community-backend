@@ -12,7 +12,7 @@ public class JwtException extends RuntimeException {
 
 	public JwtException(JwtErrorCode errorCode) {
 		super(errorCode.getMessage());
-		this.status = errorCode.getHttpStatus();
+		this.status = errorCode.getStatus();
 		this.code = errorCode.getCode();
 	}
 }

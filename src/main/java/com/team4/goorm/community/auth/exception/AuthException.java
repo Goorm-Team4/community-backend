@@ -1,20 +1,18 @@
-package com.team4.goorm.community.member.exception;
+package com.team4.goorm.community.auth.exception;
 
 import org.springframework.http.HttpStatus;
 
 import lombok.Getter;
 
 @Getter
-public class MemberException extends RuntimeException {
+public class AuthException extends RuntimeException {
 
 	private final HttpStatus status;
 	private final String code;
 
-
-	public MemberException(MemberErrorCode errorCode) {
+	public AuthException(AuthErrorCode errorCode) {
 		super(errorCode.getMessage());
 		this.status = errorCode.getStatus();
 		this.code = errorCode.getCode();
 	}
-
 }

@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
-import com.team4.goorm.community.auth.dto.TokenRespDto;
+import com.team4.goorm.community.auth.dto.response.TokenRespDto;
 import com.team4.goorm.community.auth.exception.JwtErrorCode;
 import com.team4.goorm.community.auth.exception.JwtException;
 import com.team4.goorm.community.member.domain.Role;

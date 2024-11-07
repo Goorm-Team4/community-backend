@@ -11,7 +11,7 @@ public class PostException extends RuntimeException {
 
 	public PostException(PostErrorCode errorCode) {
 		super(errorCode.getMessage());
-		this.status = errorCode.getHttpStatus();
+		this.status = errorCode.getStatus();
 		this.code = errorCode.getCode();
 	}
 }

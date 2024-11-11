@@ -17,14 +17,14 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MemberException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleMemberException(MemberException e) {
-		log.warn("Member Exception: ", e.getMessage(), e);
+		log.warn("Member Exception: {}", e.getMessage());
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}
 
 	@ExceptionHandler(AuthException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleAuthException(AuthException e) {
-		log.warn("Auth Exception: ", e.getMessage(), e);
+		log.warn("Auth Exception: {}", e.getMessage());
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}
@@ -32,14 +32,14 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(MailException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleMailException(MailException e) {
-		log.warn("Mail Exception: ", e.getMessage(), e);
+		log.warn("Mail Exception: {}", e.getMessage());
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}
 
 	@ExceptionHandler(PostException.class)
 	public ResponseEntity<ErrorResponse<Void>> handlePostException(PostException e) {
-		log.warn("Post Exception: ", e.getMessage(), e);
+		log.warn("Post Exception: {}", e.getMessage());
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}

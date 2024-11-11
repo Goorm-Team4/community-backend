@@ -1,10 +1,12 @@
 package com.team4.goorm.community.member.application;
 
+import com.team4.goorm.community.image.service.AmazonS3Service;
 import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.dto.request.UpdateMemberProfileReqDto;
+import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Transactional
@@ -12,16 +14,21 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCommandService {
 
     private final MemberQueryService memberQueryService;
+    private final AmazonS3Service amazonS3Service;
 
-    public void updateMyProfile(UpdateMemberProfileReqDto request, String email) {
+    public ProfileInfoRespDto updateMyProfile(String username, MultipartFile profileImage, String email) {
         Member member = memberQueryService.findMemberByEmail(email);
 
-        if (request.getUsername() != null && !request.getUsername().isEmpty()) {
-            member.updateUsername(request.getUsername());
+        if (username != null && !username.isEmpty()) {
+            member.updateUsername(username);
         }
 
-        if (request.getProfileImageUrl() != null && !request.getProfileImageUrl().isEmpty()) {
-            member.updateProfileImageUrl(request.getProfileImageUrl());
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String imageUrl = amazonS3Service.uploadImage(profileImage);
+            member.updateProfileImageUrl(imageUrl);
         }
+
+        return ProfileInfoRespDto.from(member);
     }
+
 }

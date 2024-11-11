@@ -34,7 +34,7 @@ public class Member extends BaseEntity {
 
 	private String password;
 
-	@Column(name = "profile_image_url")
+	@Column(name = "profile_image_url", length = 512)
 	private String profileImageUrl;
 
 	@Builder

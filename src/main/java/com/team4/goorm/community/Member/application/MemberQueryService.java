@@ -1,5 +1,7 @@
 package com.team4.goorm.community.member.application;
 
+import com.team4.goorm.community.auth.exception.AuthErrorCode;
+import com.team4.goorm.community.auth.exception.AuthException;
 import com.team4.goorm.community.member.domain.Member;
 import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
 import com.team4.goorm.community.member.exception.MemberException;
@@ -25,6 +27,12 @@ public class MemberQueryService {
     public ProfileInfoRespDto getMyProfile(String email) {
         Member member = findMemberByEmail(email);
         return ProfileInfoRespDto.from(member);
+    }
+
+    public void validateUniqueEmail(String email) {
+        if (memberRepository.existsByEmail(email)) {
+            throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
+        }
     }
 
 //    public List<PostInfoRespDto> getMyPosts(String email) {

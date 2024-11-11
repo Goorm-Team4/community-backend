@@ -33,13 +33,13 @@ public class MemberController {
     }
 
     @PatchMapping("/me")
-    public ResponseEntity<SuccessResponse<String>> updateMyProfile(
-            @RequestBody UpdateMemberProfileReqDto request,
+    public ResponseEntity<SuccessResponse<ProfileInfoRespDto>> updateMyProfile(
+            @RequestPart("image") MultipartFile profileImage,
+            @RequestPart String username,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
-        memberCommandService.updateMyProfile(request, user.getEmail());
-
-        return ResponseEntity.ok(SuccessResponse.success("프로필 정보 수정에 성공하였습니다."));
+        return ResponseEntity.ok(SuccessResponse.success(
+                memberCommandService.updateMyProfile(username, profileImage, user.getEmail())));
     }
 
 }

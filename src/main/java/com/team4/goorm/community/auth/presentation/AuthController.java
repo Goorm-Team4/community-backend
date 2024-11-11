@@ -7,14 +7,15 @@ import com.team4.goorm.community.auth.dto.request.SignupReqDto;
 import com.team4.goorm.community.auth.dto.response.LoginRespDto;
 import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
-import com.team4.goorm.community.mail.application.MailService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Auth", description = "인증 관련 API")
 @RequiredArgsConstructor
@@ -23,19 +24,20 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
 	private final AuthService authService;
-	private final MailService mailService;
 
-	@Operation(summary = "일반 회원가입")
-	@PostMapping("/signup")
-	public ResponseEntity<SuccessResponse<String>> signup(@RequestBody SignupReqDto req) {
-		authService.signup(req);
+	@Operation(summary = "일반 회원가입", description = "Contnet-type info는 application/json으로 요청해주세요.")
+	@PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<SuccessResponse<String>> signup(
+			@RequestPart("info") SignupReqDto request,
+			@RequestPart(value = "image", required = false) MultipartFile profileImage) {
+		authService.signup(request, profileImage);
 		return ResponseEntity.ok(SuccessResponse.success("회원가입 성공"));
 	}
 
 	@Operation(summary = "일반 로그인")
 	@PostMapping("/login")
-	public ResponseEntity<SuccessResponse<LoginRespDto>> login(@RequestBody LoginReqDto req) {
-		LoginRespDto resp = authService.login(req);
+	public ResponseEntity<SuccessResponse<LoginRespDto>> login(@RequestBody LoginReqDto request) {
+		LoginRespDto resp = authService.login(request);
 		return ResponseEntity.ok(SuccessResponse.success(resp));
 	}
 

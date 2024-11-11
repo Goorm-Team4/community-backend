@@ -10,19 +10,23 @@ import com.team4.goorm.community.auth.exception.AuthException;
 import com.team4.goorm.community.auth.jwt.utils.JwtUtil;
 import com.team4.goorm.community.auth.presentation.ChangePasswordReqDto;
 import com.team4.goorm.community.global.utils.RedisUtil;
+import com.team4.goorm.community.image.service.AmazonS3Service;
 import com.team4.goorm.community.mail.application.MailService;
 import com.team4.goorm.community.member.application.MemberQueryService;
 import com.team4.goorm.community.member.domain.Member;
 import com.team4.goorm.community.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
 @Service
@@ -31,6 +35,7 @@ public class AuthService {
 	private final MemberQueryService memberQueryService;
 	private final MemberRepository memberRepository;
 	private final MailService mailService;
+	private final AmazonS3Service amazonS3Service;
 	private final PasswordEncoder passwordEncoder;
 	private final JwtUtil jwtUtil;
 	private final RedisUtil redisUtil;
@@ -42,8 +47,10 @@ public class AuthService {
 	private static final char[] CHAR_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 	private static final int PASSWORD_LENGTH = 12;
 
-	public void signup(SignupReqDto request) {
-		Member member = request.toEntity();
+	public void signup(SignupReqDto request, MultipartFile profileImage) {
+		// s3에 이미지 업로드
+		String imageUrl = amazonS3Service.uploadImage(profileImage);
+		Member member = request.toEntity(imageUrl);
 		member.setEncryptedPassword(passwordEncoder.encode(request.getPassword()));
 
 		memberRepository.save(member);
@@ -60,12 +67,12 @@ public class AuthService {
 
 	@Transactional(readOnly = true)
 	public void sendVerificationEmail(String toEmail) {
-		validateEmail(toEmail);
+		memberQueryService.validateUniqueEmail(toEmail);
 
 		String subject = "[Community] 회원가입 인증 메일입니다.";
 		String authCode = generateAuthCode();
 		String content = "<p>안녕하세요. Community 회원가입 인증 메일입니다.</p>" +
-				"<p>아래의 인증 코드를 입력해 주세요:</p>" +
+				"<p>아래의 인증코드를 입력해 주세요:</p>" +
 				"<p><strong>인증코드: " + authCode + "</strong></p>";
 
 		mailService.sendEmail(toEmail, subject, content);
@@ -108,7 +115,7 @@ public class AuthService {
 
 		String subject = "[Community] 임시 비밀번호 안내 메일입니다.";
 		String tempPassword = generateTempPassword();
-		String content = "<p>안녕하세요. Community 임시비밀번호 안내 메일 입니다.</p>" +
+		String content = "<p>안녕하세요. Community 임시 비밀번호 안내 메일입니다.</p>" +
 				"<p>로그인 후에 비밀번호를 변경해주세요.</p>" +
 				"<p><strong>임시 비밀번호: " + tempPassword + "</strong></p>";
 
@@ -124,12 +131,6 @@ public class AuthService {
 
 		// 새로운 비밀번호로 변경
 		member.setEncryptedPassword(request.getNewPassword());
-	}
-
-	private void validateEmail(String email) {
-		if (memberRepository.existsByEmail(email)) {
-			throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
-		}
 	}
 
 	private void verifyPassword(String rawPassword, String encodedPassword) {

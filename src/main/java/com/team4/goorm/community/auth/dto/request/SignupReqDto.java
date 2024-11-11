@@ -2,12 +2,12 @@ package com.team4.goorm.community.auth.dto.request;
 
 import com.team4.goorm.community.member.domain.Member;
 import com.team4.goorm.community.member.domain.Role;
-import com.team4.goorm.community.member.domain.SocialType;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import static com.team4.goorm.community.member.domain.SocialType.LOCAL;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -26,11 +26,19 @@ public class SignupReqDto {
 		return Member.builder()
 				.email(email)
 				.role(Role.ROLE_USER)
-				.socialType(SocialType.LOCAL)
+				.socialType(LOCAL)
 				.username(username)
 				.profileImageUrl(profileImageUrl)
 				.build();
 	}
 
-
+	public Member toEntity(String profileImageUrl) {
+		return Member.builder()
+				.email(email)
+				.role(Role.ROLE_USER)
+				.socialType(LOCAL)
+				.username(username)
+				.profileImageUrl(profileImageUrl)
+				.build();
+	}
 }

@@ -43,6 +43,7 @@ public class MemberController {
             @RequestPart(required = false) String username,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
+        log.info("username: {}", username);
         return ResponseEntity.ok(SuccessResponse.success(
                 memberCommandService.updateMyProfile(username, profileImage, user.getEmail())));
     }

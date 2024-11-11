@@ -2,6 +2,7 @@ package com.team4.goorm.community.global.exception;
 
 import com.team4.goorm.community.auth.exception.AuthException;
 import com.team4.goorm.community.global.common.dto.ErrorResponse;
+import com.team4.goorm.community.image.exception.ImageException;
 import com.team4.goorm.community.mail.exception.MailException;
 import com.team4.goorm.community.member.exception.MemberException;
 import com.team4.goorm.community.post.exception.PostException;
@@ -43,6 +44,14 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}
+
+	@ExceptionHandler(ImageException.class)
+	public ResponseEntity<ErrorResponse<Void>> handleImageException(ImageException e) {
+		log.warn("Image Exception: {}", e.getMessage());
+
+		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
+	}
+
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ErrorResponse<Void>> handleException(Exception e) {

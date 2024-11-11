@@ -1,20 +1,17 @@
 package com.team4.goorm.community.auth.domain;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @RequiredArgsConstructor
 @Getter
 public class CustomUserDetails implements UserDetails {
 
-	@Getter
 	private final String email;
 	private final String username;
 	private final String authority;

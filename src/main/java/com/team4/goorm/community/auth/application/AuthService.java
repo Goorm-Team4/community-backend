@@ -70,14 +70,17 @@ public class AuthService {
 		}
 	}
 
+	@Transactional(readOnly = true)
 	public void sendVerificationEmail(String toEmail) {
 		validateEmail(toEmail);
 
-		String title = "Community에서 인증코드를 알려드립니다.";
-		String authCode = createRandomCode();
-		String content = "인증코드: " + authCode;
+		String subject = "[Community] 회원가입 인증 메일입니다.";
+		String authCode = generateAuthCode();
+		String content = "<p>안녕하세요. Community 회원가입 인증 메일입니다.</p>" +
+				"<p>아래의 인증 코드를 입력해 주세요:</p>" +
+				"<p><strong>인증코드: " + authCode + "</strong></p>";
 
-		mailService.sendEmail(toEmail, title, content);
+		mailService.sendEmail(toEmail, subject, content);
 
 		// 이메일 인증 요청 시 인증 번호 Redis에 저장 (key = "AUTHCODE_" + Email/value = AuthCode)
 		redisUtil.setValue(AUTH_CODE_PREFIX + toEmail,

@@ -21,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
@@ -34,12 +33,13 @@ public class AuthService {
 	private final PasswordEncoder passwordEncoder;
 	private final JwtUtil jwtUtil;
 	private final RedisUtil redisUtil;
-
 	@Value("${spring.mail.code-expiration-time}")
 	private long codeExpirationTime;
-
+	private static final SecureRandom RANDOM = new SecureRandom();
 	private static final String AUTH_CODE_PREFIX = "AUTH_CODE_";
 	private static final int AUTH_CODE_LENGTH = 6;
+	private static final char[] CHAR_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+	private static final int PASSWORD_LENGTH = 12;
 
 	public void signup(SignupReqDto req) {
 		Member member = req.toEntity();
@@ -88,11 +88,10 @@ public class AuthService {
 				codeExpirationTime, TimeUnit.MILLISECONDS);
 	}
 
-	private String createRandomCode() {
-		Random random = new SecureRandom();
+	private String generateAuthCode() {
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < AUTH_CODE_LENGTH; i++) {
-			builder.append(random.nextInt(10));
+			builder.append(RANDOM.nextInt(10));
 		}
 		return builder.toString();
 	}
@@ -119,5 +118,30 @@ public class AuthService {
 					.message("이메일 인증에 실패하였습니다.")
 					.build();
 		}
+	}
+
+	@Transactional
+	public void sendTempPassword(String email) {
+		Member member = memberRepository.findByEmail(email)
+				.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+		String subject = "[Community] 임시 비밀번호 안내 메일입니다.";
+		String tempPassword = createTempPassword();
+		String content = "<p>안녕하세요. Community 임시비밀번호 안내 메일 입니다.</p>" +
+				"<p>로그인 후에 비밀번호를 변경해주세요.</p>" +
+				"<p><strong>임시 비밀번호: " + tempPassword + "</strong></p>";
+
+		member.setEncryptedPassword(passwordEncoder.encode(tempPassword));
+
+		mailService.sendEmail(email, subject, content);
+	}
+
+	public static String createTempPassword(){
+		StringBuilder str = new StringBuilder(PASSWORD_LENGTH);
+		for (int i = 0; i < PASSWORD_LENGTH; i++) {
+			int idx = RANDOM.nextInt(CHAR_SET.length);
+			str.append(CHAR_SET[idx]);
+		}
+		return str.toString();
 	}
 }

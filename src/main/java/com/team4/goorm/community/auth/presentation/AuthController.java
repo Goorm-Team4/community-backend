@@ -8,6 +8,7 @@ import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
 import com.team4.goorm.community.mail.application.MailService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -39,6 +40,7 @@ public class AuthController {
 	@Operation(summary = "이메일 인증코드 전송")
 	@PostMapping("/emails/verification")
 	public ResponseEntity<SuccessResponse<String>> sendVerificationEmail(
+			@Parameter(description = "이메일")
 			@RequestParam String email) {
 		authService.sendVerificationEmail(email);
 		return ResponseEntity.ok(SuccessResponse.success("인증 이메일 전송에 성공하였습니다."));
@@ -47,7 +49,9 @@ public class AuthController {
 	@Operation(summary = "이메일 인증코드 검증")
 	@GetMapping("/emails/verification")
 	public ResponseEntity<SuccessResponse<MailVerificationRespDto>> verificationEmail(
+			@Parameter(description = "이메일")
 			@RequestParam String email,
+			@Parameter(description = "인증코드")
 			@RequestParam String authCode) {
 
 		MailVerificationRespDto response = authService.verifyCode(email, authCode);

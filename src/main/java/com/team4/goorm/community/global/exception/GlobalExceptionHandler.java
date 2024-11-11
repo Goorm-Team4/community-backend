@@ -1,16 +1,15 @@
 package com.team4.goorm.community.global.exception;
 
+import com.team4.goorm.community.auth.exception.AuthException;
+import com.team4.goorm.community.global.common.dto.ErrorResponse;
+import com.team4.goorm.community.mail.exception.MailException;
+import com.team4.goorm.community.member.exception.MemberException;
+import com.team4.goorm.community.post.exception.PostException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import com.team4.goorm.community.auth.exception.AuthException;
-import com.team4.goorm.community.member.exception.MemberException;
-import com.team4.goorm.community.global.common.dto.ErrorResponse;
-import com.team4.goorm.community.post.exception.PostException;
-
-import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -26,6 +25,14 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(AuthException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleAuthException(AuthException e) {
 		log.warn("Auth Exception: ", e.getMessage(), e);
+
+		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
+	}
+
+
+	@ExceptionHandler(MemberException.class)
+	public ResponseEntity<ErrorResponse<Void>> handleMailException(MailException e) {
+		log.warn("Mail Exception: ", e.getMessage(), e);
 
 		return ResponseEntity.status(e.getStatus()).body(ErrorResponse.failure(e.getCode(), e.getMessage()));
 	}

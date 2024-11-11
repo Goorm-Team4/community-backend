@@ -4,9 +4,11 @@ import com.team4.goorm.community.auth.application.AuthService;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.auth.dto.request.LoginReqDto;
 import com.team4.goorm.community.auth.dto.request.SignupReqDto;
+import com.team4.goorm.community.auth.dto.response.DuplicateCheckRespDto;
 import com.team4.goorm.community.auth.dto.response.LoginRespDto;
 import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
+import com.team4.goorm.community.member.application.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,6 +26,16 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuthController {
 
 	private final AuthService authService;
+	private final MemberQueryService memberQueryService;
+
+	@Operation(summary = "닉네임 중복 검사")
+	@GetMapping("/username/validation")
+	public ResponseEntity<SuccessResponse<DuplicateCheckRespDto>> validateUniqueUsername(
+			@Parameter(description = "닉네임", example = "구름")
+			@RequestParam String username) {
+		return ResponseEntity.ok(SuccessResponse.success(
+				authService.checkUsernameDuplicate(username)));
+	}
 
 	@Operation(summary = "일반 회원가입", description = "Contnet-type info는 application/json으로 요청해주세요.")
 	@PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -52,13 +64,13 @@ public class AuthController {
 
 	@Operation(summary = "이메일 인증코드 검증")
 	@GetMapping("/emails/verification")
-	public ResponseEntity<SuccessResponse<MailVerificationRespDto>> verificationEmail(
+	public ResponseEntity<SuccessResponse<MailVerificationRespDto>> verifyAuthCode(
 			@Parameter(description = "이메일")
 			@RequestParam String email,
 			@Parameter(description = "인증코드")
 			@RequestParam String authCode) {
 
-		MailVerificationRespDto response = authService.verifyCode(email, authCode);
+		MailVerificationRespDto response = authService.verifyAuthCode(email, authCode);
 		return ResponseEntity.ok(SuccessResponse.success(response));
 	}
 

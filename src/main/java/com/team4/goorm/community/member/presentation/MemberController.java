@@ -5,7 +5,6 @@ import com.team4.goorm.community.global.common.dto.SuccessResponse;
 import com.team4.goorm.community.member.application.MemberCommandService;
 import com.team4.goorm.community.member.application.MemberQueryService;
 import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
-import com.team4.goorm.community.post.dto.response.PostInfoRespDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Slf4j
 @Tag(name = "Member", description = "멤버 관련 API")
@@ -48,10 +45,10 @@ public class MemberController {
                 memberCommandService.updateMyProfile(username, profileImage, user.getEmail())));
     }
 
-    @GetMapping("/me/posts")
-    public ResponseEntity<SuccessResponse<List<PostInfoRespDto>>> getMyPosts(
-            @AuthenticationPrincipal CustomUserDetails user
-            ) {
-        return null;
-    }
+//    @GetMapping("/me/posts")
+//    public ResponseEntity<SuccessResponse<List<PostInfoRespDto>>> getMyPosts(
+//            @AuthenticationPrincipal CustomUserDetails user
+//            ) {
+//        return null;
+//    }
 }

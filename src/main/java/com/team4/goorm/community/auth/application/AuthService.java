@@ -2,6 +2,7 @@ package com.team4.goorm.community.auth.application;
 
 import com.team4.goorm.community.auth.dto.request.LoginReqDto;
 import com.team4.goorm.community.auth.dto.request.SignupReqDto;
+import com.team4.goorm.community.auth.dto.response.DuplicateCheckRespDto;
 import com.team4.goorm.community.auth.dto.response.LoginRespDto;
 import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.auth.dto.response.TokenRespDto;
@@ -85,7 +86,7 @@ public class AuthService {
 				codeExpirationTime, TimeUnit.MILLISECONDS);
 	}
 
-	public MailVerificationRespDto verifyCode(String email, String authCode) {
+	public MailVerificationRespDto verifyAuthCode(String email, String authCode) {
 		String key = AUTH_CODE_PREFIX + email;
 		boolean sucess = false;
 
@@ -160,5 +161,21 @@ public class AuthService {
 			str.append(CHAR_SET[idx]);
 		}
 		return str.toString();
+	}
+
+	@Transactional(readOnly = true)
+	public DuplicateCheckRespDto checkUsernameDuplicate(String username) {
+		if (memberQueryService.existsByUsername(username)) {
+			return DuplicateCheckRespDto.builder()
+					.isDuplicate(true)
+					.message("이미 사용중인 닉네임입니다.")
+					.build();
+		} else {
+			return DuplicateCheckRespDto.builder()
+					.isDuplicate(false)
+					.message("사용 가능한 닉네임입니다.")
+					.build();
+		}
+
 	}
 }

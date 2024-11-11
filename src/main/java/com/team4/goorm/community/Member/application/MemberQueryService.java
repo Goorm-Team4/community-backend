@@ -29,11 +29,25 @@ public class MemberQueryService {
         return ProfileInfoRespDto.from(member);
     }
 
+//    public boolean existsByEmail(String email) {
+//        return memberRepository.existsByEmail(email);
+//    }
+
+    public boolean existsByUsername(String username) {
+        return memberRepository.existsByUsername(username);
+    }
+
     public void validateUniqueEmail(String email) {
         if (memberRepository.existsByEmail(email)) {
             throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
         }
     }
+//
+//    public void validateUniqueUsername(String username) {
+//        if (memberRepository.existsByUsername(username)) {
+//            throw new AuthException(AuthErrorCode.USERNAME_ALREADY_EXISTS);
+//        }
+//    }
 
 //    public List<PostInfoRespDto> getMyPosts(String email) {
 //        Member member = findMemberByEmail(email);

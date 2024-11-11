@@ -7,14 +7,13 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class MailVerificationRespDto {
-
-    private boolean success;
+public class DuplicateCheckRespDto {
+    private boolean duplicate;
     private String message;
 
     @Builder
-    public MailVerificationRespDto(boolean success, String message) {
-        this.success = success;
+    public DuplicateCheckRespDto(boolean duplicate, String message) {
+        this.duplicate = duplicate;
         this.message = message;
     }
 }

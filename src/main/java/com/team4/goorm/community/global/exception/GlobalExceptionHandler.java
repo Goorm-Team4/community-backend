@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
 	}
 
 
-	@ExceptionHandler(MemberException.class)
+	@ExceptionHandler(MailException.class)
 	public ResponseEntity<ErrorResponse<Void>> handleMailException(MailException e) {
 		log.warn("Mail Exception: ", e.getMessage(), e);
 

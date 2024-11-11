@@ -11,7 +11,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum AuthErrorCode implements BaseErrorCode {
 
-	EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "MEMBER_400_0", "이미 가입된 이메일입니다."),
+	EMAIL_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "AUTH_400_0", "이미 가입된 이메일입니다."),
 	INVALID_CREDENTIALS(HttpStatus.UNAUTHORIZED, "AUTH_401_0", "잘못된 이메일 또는 비밀번호입니다.");
 
 	private final HttpStatus status;

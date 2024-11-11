@@ -8,6 +8,7 @@ import com.team4.goorm.community.auth.dto.response.TokenRespDto;
 import com.team4.goorm.community.auth.exception.AuthErrorCode;
 import com.team4.goorm.community.auth.exception.AuthException;
 import com.team4.goorm.community.auth.jwt.utils.JwtUtil;
+import com.team4.goorm.community.auth.presentation.ChangePasswordReqDto;
 import com.team4.goorm.community.global.utils.RedisUtil;
 import com.team4.goorm.community.mail.application.MailService;
 import com.team4.goorm.community.member.domain.Member;
@@ -48,12 +49,6 @@ public class AuthService {
 		memberRepository.save(member);
 	}
 
-	private void validateEmail(String email) {
-		if (memberRepository.existsByEmail(email)) {
-			throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
-		}
-	}
-
 	public LoginRespDto login(LoginReqDto req) {
 		Member member = memberRepository.findByEmail(req.getEmail())
 			.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
@@ -62,12 +57,6 @@ public class AuthService {
 		TokenRespDto tokenRespDto = jwtUtil.issueAccessToken(member.getEmail(), member.getUsername());
 
 		return new LoginRespDto(tokenRespDto.getAccessToken());
-	}
-
-	private void verifyPassword(String rawPassword, String encodedPassword) {
-		if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-			throw new AuthException(AuthErrorCode.INVALID_CREDENTIALS);
-		}
 	}
 
 	@Transactional(readOnly = true)
@@ -82,18 +71,12 @@ public class AuthService {
 
 		mailService.sendEmail(toEmail, subject, content);
 
-		// 이메일 인증 요청 시 인증 번호 Redis에 저장 (key = "AUTHCODE_" + Email/value = AuthCode)
+		// 인증코드 redis에 저장
+		// -> key: "AUTHCODE_" + email
+		// -> value: auth code
 		redisUtil.setValue(AUTH_CODE_PREFIX + toEmail,
 				authCode,
 				codeExpirationTime, TimeUnit.MILLISECONDS);
-	}
-
-	private String generateAuthCode() {
-		StringBuilder builder = new StringBuilder();
-		for (int i = 0; i < AUTH_CODE_LENGTH; i++) {
-			builder.append(RANDOM.nextInt(10));
-		}
-		return builder.toString();
 	}
 
 	public MailVerificationRespDto verifyCode(String email, String authCode) {
@@ -104,6 +87,7 @@ public class AuthService {
 			String redisAuthCode = redisUtil.getValue(key).toString();
 			sucess = redisAuthCode.equals(authCode);
 
+			// redis에 저장된 인증코드 삭제
 			redisUtil.deleteValue(key);
 		}
 
@@ -120,13 +104,12 @@ public class AuthService {
 		}
 	}
 
-	@Transactional
 	public void sendTempPassword(String email) {
 		Member member = memberRepository.findByEmail(email)
 				.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
 
 		String subject = "[Community] 임시 비밀번호 안내 메일입니다.";
-		String tempPassword = createTempPassword();
+		String tempPassword = generateTempPassword();
 		String content = "<p>안녕하세요. Community 임시비밀번호 안내 메일 입니다.</p>" +
 				"<p>로그인 후에 비밀번호를 변경해주세요.</p>" +
 				"<p><strong>임시 비밀번호: " + tempPassword + "</strong></p>";
@@ -136,7 +119,43 @@ public class AuthService {
 		mailService.sendEmail(email, subject, content);
 	}
 
-	public static String createTempPassword(){
+	public void changePassword(ChangePasswordReqDto request, String email) {
+		Member member = memberRepository.findByEmail(email)
+				.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+
+		verifyPassword(request.getCurrentPassword(), member.getPassword());
+
+		// 새로운 비밀번호로 변경
+		member.setEncryptedPassword(request.getNewPassword());
+	}
+
+	private void validateEmail(String email) {
+		if (memberRepository.existsByEmail(email)) {
+			throw new AuthException(AuthErrorCode.EMAIL_ALREADY_EXISTS);
+		}
+	}
+
+	private void verifyPassword(String rawPassword, String encodedPassword) {
+		if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+			throw new AuthException(AuthErrorCode.INVALID_CREDENTIALS);
+		}
+	}
+
+	/**
+	 * 랜덤 인증코드 생성
+	 */
+	private String generateAuthCode() {
+		StringBuilder builder = new StringBuilder();
+		for (int i = 0; i < AUTH_CODE_LENGTH; i++) {
+			builder.append(RANDOM.nextInt(10));
+		}
+		return builder.toString();
+	}
+
+	/**
+	 * 랜덤 임시 비밀번호 생성
+	 */
+	public static String generateTempPassword(){
 		StringBuilder str = new StringBuilder(PASSWORD_LENGTH);
 		for (int i = 0; i < PASSWORD_LENGTH; i++) {
 			int idx = RANDOM.nextInt(CHAR_SET.length);

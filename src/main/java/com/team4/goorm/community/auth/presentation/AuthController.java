@@ -60,12 +60,22 @@ public class AuthController {
 		return ResponseEntity.ok(SuccessResponse.success(response));
 	}
 
-	@Operation(summary = "이메일 임시 비밀번호 전송(비밀번호 찾기)")
+	@Operation(summary = "이메일 임시 비밀번호 전송")
 	@PostMapping("/password/temp")
 	public ResponseEntity<SuccessResponse<String>> sendTempPasswordEmail(
 			@AuthenticationPrincipal CustomUserDetails user) {
 
 		authService.sendTempPassword(user.getEmail());
 		return ResponseEntity.ok(SuccessResponse.success("임시 비밀번호 발급에 성공하였습니다."));
+	}
+
+	@Operation(summary = "비밀번호 변경")
+	@PatchMapping("/password")
+	public ResponseEntity<SuccessResponse<String>> changePassword(
+			@RequestBody ChangePasswordReqDto request,
+			@AuthenticationPrincipal CustomUserDetails user) {
+
+		authService.changePassword(request, user.getEmail());
+		return ResponseEntity.ok(SuccessResponse.success("비밀번호 변경에 성공하였습니다."));
 	}
 }

@@ -37,7 +37,7 @@ public class AuthController {
 				authService.checkUsernameDuplicate(username)));
 	}
 
-	@Operation(summary = "일반 회원가입", description = "Contnet-type info는 application/json으로 요청해주세요.")
+	@Operation(summary = "일반 회원가입", description = "Contnet-type info는 application/json으로 요청해주세요. (이미지는 url말고 파일 보내주셔야합니다.)")
 	@PostMapping(value = "/signup", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<SuccessResponse<String>> signup(
 			@RequestPart("info") SignupReqDto request,

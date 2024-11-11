@@ -33,14 +33,13 @@ public class MemberController {
                 memberQueryService.getMyProfile(user.getEmail())));
     }
 
-    @Operation(summary = "내 프로필 수정")
+    @Operation(summary = "내 프로필 수정", description = "이미지는 url말고 파일로 보내주셔야합니다.")
     @PatchMapping(value = "/me", consumes = "multipart/form-data")
     public ResponseEntity<SuccessResponse<ProfileInfoRespDto>> updateMyProfile(
             @RequestPart(value = "image", required = false) MultipartFile profileImage,
             @RequestPart(required = false) String username,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
-        log.info("username: {}", username);
         return ResponseEntity.ok(SuccessResponse.success(
                 memberCommandService.updateMyProfile(username, profileImage, user.getEmail())));
     }

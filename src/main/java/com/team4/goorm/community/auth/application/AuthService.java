@@ -100,12 +100,12 @@ public class AuthService {
 
 		if (sucess) {
 			return MailVerificationRespDto.builder()
-					.isVerificationSuccess(true)
+					.success(true)
 					.message("이메일 인증에 성공하였습니다.")
 					.build();
 		} else {
 			return MailVerificationRespDto.builder()
-					.isVerificationSuccess(false)
+					.success(false)
 					.message("이메일 인증에 실패하였습니다.")
 					.build();
 		}
@@ -167,12 +167,12 @@ public class AuthService {
 	public DuplicateCheckRespDto checkUsernameDuplicate(String username) {
 		if (memberQueryService.existsByUsername(username)) {
 			return DuplicateCheckRespDto.builder()
-					.isDuplicate(true)
+					.duplicate(true)
 					.message("이미 사용중인 닉네임입니다.")
 					.build();
 		} else {
 			return DuplicateCheckRespDto.builder()
-					.isDuplicate(false)
+					.duplicate(false)
 					.message("사용 가능한 닉네임입니다.")
 					.build();
 		}

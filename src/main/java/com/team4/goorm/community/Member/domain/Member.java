@@ -1,15 +1,10 @@
-package com.team4.goorm.community.Member.domain;
+package com.team4.goorm.community.member.domain;
 
 import com.team4.goorm.community.global.common.domain.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.validation.constraints.Email;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,19 +17,41 @@ public class Member extends BaseEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long memberId;
 
-	@Email
-	@Column(nullable = false)
-	private String email;
+	@Column(name = "social_id")
+	private String socialId;
 
-	@Size(min = 6, max = 20)
-	@Column(nullable = false)
-	private String loginId;
+	@Enumerated(EnumType.STRING)
+	private SocialType socialType;
+
+	@Enumerated(EnumType.STRING)
+	private Role role;
+
+	private String email;
 
 	@Size(min = 2, max = 20)
 	@Column(nullable = false)
 	private String username;
 
-	@Size(min = 8, max = 20)
-	@Column(nullable = false)
 	private String password;
+
+	@Column(name = "profile_image_url", length = 512)
+	private String profileImageUrl;
+
+	@Builder
+	public Member(String socialId, SocialType socialType, Role role, String email, String username, String password,
+		String profileImageUrl) {
+		this.socialId = socialId;
+		this.socialType = socialType;
+		this.role = role;
+		this.email = email;
+		this.username = username;
+		this.password = password;
+		this.profileImageUrl = profileImageUrl;
+	}
+
+	public void setEncryptedPassword(String password) {
+		this.password = password;
+	}
+	public void updateUsername(String username) { this.username = username; }
+	public void updateProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
 }

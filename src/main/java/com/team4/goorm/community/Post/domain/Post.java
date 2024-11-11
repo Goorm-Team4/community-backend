@@ -1,6 +1,6 @@
-package com.team4.goorm.community.Post.domain;
+package com.team4.goorm.community.post.domain;
 
-import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.member.domain.Member;
 import com.team4.goorm.community.global.common.domain.BaseEntity;
 
 import jakarta.persistence.Column;

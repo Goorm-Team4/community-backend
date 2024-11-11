@@ -11,9 +11,8 @@ import com.team4.goorm.community.auth.jwt.utils.JwtUtil;
 import com.team4.goorm.community.auth.presentation.ChangePasswordReqDto;
 import com.team4.goorm.community.global.utils.RedisUtil;
 import com.team4.goorm.community.mail.application.MailService;
+import com.team4.goorm.community.member.application.MemberQueryService;
 import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.exception.MemberErrorCode;
-import com.team4.goorm.community.member.exception.MemberException;
 import com.team4.goorm.community.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class AuthService {
 
+	private final MemberQueryService memberQueryService;
 	private final MemberRepository memberRepository;
 	private final MailService mailService;
 	private final PasswordEncoder passwordEncoder;
@@ -42,18 +42,17 @@ public class AuthService {
 	private static final char[] CHAR_SET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 	private static final int PASSWORD_LENGTH = 12;
 
-	public void signup(SignupReqDto req) {
-		Member member = req.toEntity();
-		member.setEncryptedPassword(passwordEncoder.encode(req.getPassword()));
+	public void signup(SignupReqDto request) {
+		Member member = request.toEntity();
+		member.setEncryptedPassword(passwordEncoder.encode(request.getPassword()));
 
 		memberRepository.save(member);
 	}
 
-	public LoginRespDto login(LoginReqDto req) {
-		Member member = memberRepository.findByEmail(req.getEmail())
-			.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+	public LoginRespDto login(LoginReqDto request) {
+		Member member = memberQueryService.findMemberByEmail(request.getEmail());
 
-		verifyPassword(req.getPassword(), member.getPassword());
+		verifyPassword(request.getPassword(), member.getPassword());
 		TokenRespDto tokenRespDto = jwtUtil.issueAccessToken(member.getEmail(), member.getUsername());
 
 		return new LoginRespDto(tokenRespDto.getAccessToken());
@@ -105,8 +104,7 @@ public class AuthService {
 	}
 
 	public void sendTempPassword(String email) {
-		Member member = memberRepository.findByEmail(email)
-				.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+		Member member = memberQueryService.findMemberByEmail(email);
 
 		String subject = "[Community] 임시 비밀번호 안내 메일입니다.";
 		String tempPassword = generateTempPassword();
@@ -120,8 +118,7 @@ public class AuthService {
 	}
 
 	public void changePassword(ChangePasswordReqDto request, String email) {
-		Member member = memberRepository.findByEmail(email)
-				.orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+		Member member = memberQueryService.findMemberByEmail(email);
 
 		verifyPassword(request.getCurrentPassword(), member.getPassword());
 

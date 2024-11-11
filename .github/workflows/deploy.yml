@@ -27,6 +27,8 @@ jobs:
           echo "${{ secrets.APPLICATION_OAUTH }}" > application-oauth.yml
           touch application-mail.yml
           echo "${{ secrets.APPLICATION_MAIL }}" > application-mail.yml
+          touch application-s3.yml
+          echo "${{ secrets.APPLICATION_S3 }}" > application-s3.yml
         shell: bash
 
       - name: Grant Execute Permission For Gradlew

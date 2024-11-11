@@ -1,14 +1,13 @@
 package com.team4.goorm.community.global.config;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -18,13 +17,23 @@ import lombok.extern.slf4j.Slf4j;
         )
 )
 @Configuration
-@Slf4j
 public class SwaggerConfig {
+
+    private static final String SECURITY_SCHEME_NAME = "JWT";
 
     @Bean
     public OpenAPI openAPI() {
+        // API 모든 요청에 보안 요구사항 설정
+        SecurityRequirement securityRequirement = new SecurityRequirement().addList(SECURITY_SCHEME_NAME);
+        Components components = new Components()
+                .addSecuritySchemes(SECURITY_SCHEME_NAME, new SecurityScheme()
+                        .name(SECURITY_SCHEME_NAME)
+                        .type(SecurityScheme.Type.HTTP)
+                        .scheme("Bearer")
+                        .bearerFormat(SECURITY_SCHEME_NAME));
 
         return new OpenAPI()
-                .components(new Components());
+                .addSecurityItem(securityRequirement)
+                .components(components);
     }
 }

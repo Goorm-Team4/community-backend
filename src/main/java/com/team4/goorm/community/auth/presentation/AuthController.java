@@ -54,7 +54,7 @@ public class AuthController {
 	}
 
 	@Operation(summary = "이메일 인증코드 전송")
-	@PostMapping("/emails/verification")
+	@PostMapping("/email/verification")
 	public ResponseEntity<SuccessResponse<String>> sendVerificationEmail(
 			@Parameter(description = "이메일")
 			@RequestParam String email) {
@@ -63,7 +63,7 @@ public class AuthController {
 	}
 
 	@Operation(summary = "이메일 인증코드 검증")
-	@GetMapping("/emails/verification")
+	@GetMapping("/email/verification")
 	public ResponseEntity<SuccessResponse<MailVerificationRespDto>> verifyAuthCode(
 			@Parameter(description = "이메일")
 			@RequestParam String email,

@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 
 import com.team4.goorm.community.auth.domain.OAuth2UserImpl;
 import com.team4.goorm.community.auth.dto.OAuthAttributes;
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.repository.MemberRepository;
+import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
 

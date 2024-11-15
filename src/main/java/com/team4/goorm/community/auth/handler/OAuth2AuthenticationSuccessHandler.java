@@ -11,7 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.team4.goorm.community.auth.domain.OAuth2UserImpl;
 import com.team4.goorm.community.auth.dto.response.TokenRespDto;
 import com.team4.goorm.community.auth.jwt.utils.JwtUtil;
-import com.team4.goorm.community.member.domain.Member;
+import com.team4.goorm.community.Member.domain.Member;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

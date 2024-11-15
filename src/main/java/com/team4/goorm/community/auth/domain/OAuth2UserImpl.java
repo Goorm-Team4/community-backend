@@ -2,13 +2,12 @@ package com.team4.goorm.community.auth.domain;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
-import com.team4.goorm.community.member.domain.Member;
+import com.team4.goorm.community.Member.domain.Member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

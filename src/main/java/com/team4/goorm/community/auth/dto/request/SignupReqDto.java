@@ -1,13 +1,13 @@
 package com.team4.goorm.community.auth.dto.request;
 
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.domain.Role;
+import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.domain.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static com.team4.goorm.community.member.domain.SocialType.LOCAL;
+import static com.team4.goorm.community.Member.domain.SocialType.LOCAL;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter

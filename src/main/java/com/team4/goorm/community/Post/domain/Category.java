@@ -1,12 +1,12 @@
-package com.team4.goorm.community.post.domain;
+package com.team4.goorm.community.Post.domain;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.team4.goorm.community.post.exception.PostErrorCode;
-import com.team4.goorm.community.post.exception.PostException;
+import com.team4.goorm.community.Post.exception.PostErrorCode;
+import com.team4.goorm.community.Post.exception.PostException;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,34 +1,21 @@
-package com.team4.goorm.community.member.application;
+package com.team4.goorm.community.Member.application;
 
-import com.team4.goorm.community.image.service.AmazonS3Service;
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
+import com.team4.goorm.community.Member.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
-@Transactional
 @Service
+@Transactional
 public class MemberCommandService {
 
-    private final MemberQueryService memberQueryService;
-    private final AmazonS3Service amazonS3Service;
-
-    public ProfileInfoRespDto updateMyProfile(String username, MultipartFile profileImage, String email) {
-        Member member = memberQueryService.findMemberByEmail(email);
-
+    public void updateMemberProfile(Member member, String username, String imageUrl) {
         if (username != null && !username.isEmpty()) {
             member.updateUsername(username);
         }
-
-        if (profileImage != null && !profileImage.isEmpty()) {
-            String imageUrl = amazonS3Service.uploadImage(profileImage);
+        if (imageUrl != null) {
             member.updateProfileImageUrl(imageUrl);
         }
-
-        return ProfileInfoRespDto.from(member);
     }
-
 }

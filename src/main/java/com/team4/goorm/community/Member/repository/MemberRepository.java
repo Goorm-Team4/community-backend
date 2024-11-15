@@ -1,6 +1,6 @@
-package com.team4.goorm.community.member.repository;
+package com.team4.goorm.community.Member.repository;
 
-import com.team4.goorm.community.member.domain.Member;
+import com.team4.goorm.community.Member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

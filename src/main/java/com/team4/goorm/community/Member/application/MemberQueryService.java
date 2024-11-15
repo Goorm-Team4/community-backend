@@ -1,23 +1,21 @@
-package com.team4.goorm.community.member.application;
+package com.team4.goorm.community.Member.application;
 
+import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.dto.response.ProfileInfoRespDto;
+import com.team4.goorm.community.Member.exception.MemberException;
+import com.team4.goorm.community.Member.repository.MemberRepository;
 import com.team4.goorm.community.auth.exception.AuthErrorCode;
 import com.team4.goorm.community.auth.exception.AuthException;
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
-import com.team4.goorm.community.member.exception.MemberException;
-import com.team4.goorm.community.member.repository.MemberRepository;
-import com.team4.goorm.community.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static com.team4.goorm.community.member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
+import static com.team4.goorm.community.Member.exception.MemberErrorCode.MEMBER_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Service
 public class MemberQueryService {
 
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
 
     public Member findMemberByEmail(String email) {
         return memberRepository.findByEmail(email)
@@ -33,7 +31,7 @@ public class MemberQueryService {
 //        return memberRepository.existsByEmail(email);
 //    }
 
-    public boolean existsByUsername(String username) {
+    public boolean existsMemberByUsername(String username) {
         return memberRepository.existsByUsername(username);
     }
 

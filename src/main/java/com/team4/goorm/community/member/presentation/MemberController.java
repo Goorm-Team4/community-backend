@@ -1,10 +1,10 @@
-package com.team4.goorm.community.member.presentation;
+package com.team4.goorm.community.Member.presentation;
 
+import com.team4.goorm.community.Member.application.MemberQueryService;
+import com.team4.goorm.community.Member.application.MemberService;
+import com.team4.goorm.community.Member.dto.response.ProfileInfoRespDto;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
-import com.team4.goorm.community.member.application.MemberCommandService;
-import com.team4.goorm.community.member.application.MemberQueryService;
-import com.team4.goorm.community.member.dto.response.ProfileInfoRespDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MemberController {
 
     private final MemberQueryService memberQueryService;
-    private final MemberCommandService memberCommandService;
+    private final MemberService memberService;
 
     @Operation(summary = "내 프로필 조회")
     @GetMapping("/me")
@@ -41,13 +41,6 @@ public class MemberController {
             @AuthenticationPrincipal CustomUserDetails user
     ) {
         return ResponseEntity.ok(SuccessResponse.success(
-                memberCommandService.updateMyProfile(username, profileImage, user.getEmail())));
+                memberService.updateMyProfile(username, profileImage, user.getEmail())));
     }
-
-//    @GetMapping("/me/posts")
-//    public ResponseEntity<SuccessResponse<List<PostInfoRespDto>>> getMyPosts(
-//            @AuthenticationPrincipal CustomUserDetails user
-//            ) {
-//        return null;
-//    }
 }

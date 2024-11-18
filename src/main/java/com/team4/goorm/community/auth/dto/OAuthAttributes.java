@@ -1,12 +1,12 @@
 package com.team4.goorm.community.auth.dto;
 
-import static com.team4.goorm.community.member.domain.SocialType.*;
+import static com.team4.goorm.community.Member.domain.SocialType.*;
 
 import java.util.Map;
 
-import com.team4.goorm.community.member.domain.SocialType;
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.domain.Role;
+import com.team4.goorm.community.Member.domain.SocialType;
+import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.domain.Role;
 
 import lombok.Builder;
 import lombok.Getter;

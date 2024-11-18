@@ -1,15 +1,9 @@
 package com.team4.goorm.community.Comment.domain;
 
-import com.team4.goorm.community.Member.domain.Member;
+
 import com.team4.goorm.community.global.common.domain.BaseEntity;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
+import com.team4.goorm.community.Member.domain.Member;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

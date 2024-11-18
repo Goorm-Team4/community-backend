@@ -8,7 +8,7 @@ import com.team4.goorm.community.auth.dto.response.DuplicateCheckRespDto;
 import com.team4.goorm.community.auth.dto.response.LoginRespDto;
 import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
-import com.team4.goorm.community.member.application.MemberQueryService;
+import com.team4.goorm.community.Member.application.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;

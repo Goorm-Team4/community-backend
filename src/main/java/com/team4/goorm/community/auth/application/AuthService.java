@@ -13,9 +13,9 @@ import com.team4.goorm.community.auth.presentation.ChangePasswordReqDto;
 import com.team4.goorm.community.global.utils.RedisUtil;
 import com.team4.goorm.community.image.service.AmazonS3Service;
 import com.team4.goorm.community.mail.application.MailService;
-import com.team4.goorm.community.member.application.MemberQueryService;
-import com.team4.goorm.community.member.domain.Member;
-import com.team4.goorm.community.member.repository.MemberRepository;
+import com.team4.goorm.community.Member.application.MemberQueryService;
+import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -165,7 +165,7 @@ public class AuthService {
 
 	@Transactional(readOnly = true)
 	public DuplicateCheckRespDto checkUsernameDuplicate(String username) {
-		if (memberQueryService.existsByUsername(username)) {
+		if (memberQueryService.existsMemberByUsername(username)) {
 			return DuplicateCheckRespDto.builder()
 					.duplicate(true)
 					.message("이미 사용중인 닉네임입니다.")

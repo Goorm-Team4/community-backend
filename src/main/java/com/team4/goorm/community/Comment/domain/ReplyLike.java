@@ -1,16 +1,8 @@
 package com.team4.goorm.community.Comment.domain;
 
-import java.lang.reflect.Member;
-
+import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.global.common.domain.BaseEntity;
-
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,5 +22,5 @@ public class ReplyLike extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
-    private  Member member;
+    private Member member;
 }

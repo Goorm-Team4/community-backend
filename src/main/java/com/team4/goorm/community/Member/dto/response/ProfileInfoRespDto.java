@@ -1,6 +1,6 @@
-package com.team4.goorm.community.member.dto.response;
+package com.team4.goorm.community.Member.dto.response;
 
-import com.team4.goorm.community.member.domain.Member;
+import com.team4.goorm.community.Member.domain.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;

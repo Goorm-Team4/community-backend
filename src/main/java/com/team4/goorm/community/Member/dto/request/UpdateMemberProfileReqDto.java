@@ -1,4 +1,4 @@
-package com.team4.goorm.community.member.dto.request;
+package com.team4.goorm.community.Member.dto.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;

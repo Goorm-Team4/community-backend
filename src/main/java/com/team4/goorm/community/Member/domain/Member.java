@@ -1,5 +1,6 @@
-package com.team4.goorm.community.member.domain;
+package com.team4.goorm.community.Member.domain;
 
+import com.team4.goorm.community.Comment.domain.CommentLike;
 import com.team4.goorm.community.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.Collection;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -54,4 +57,15 @@ public class Member extends BaseEntity {
 	}
 	public void updateUsername(String username) { this.username = username; }
 	public void updateProfileImageUrl(String profileImageUrl) { this.profileImageUrl = profileImageUrl; }
+
+    @OneToMany(mappedBy = "member")
+    private Collection<CommentLike> commentLike;
+
+    public Collection<CommentLike> getCommentLike() {
+        return commentLike;
+    }
+
+    public void setCommentLike(Collection<CommentLike> commentLike) {
+        this.commentLike = commentLike;
+    }
 }

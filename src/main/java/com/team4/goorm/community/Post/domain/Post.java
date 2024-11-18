@@ -1,17 +1,8 @@
-package com.team4.goorm.community.post.domain;
+package com.team4.goorm.community.Post.domain;
 
-import com.team4.goorm.community.member.domain.Member;
+import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.global.common.domain.BaseEntity;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,4 +31,13 @@ public class Post extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false)
 	private Member member;
+
+	@Column(name = "like_count")
+	private Long likeCount = 0L;
+
+	@Column(name = "comment_count")
+	private Long commentCount = 0L;
+
+	@Column(name = "thumbnail_image_url")
+	private String thumbnailImageUrl;
 }

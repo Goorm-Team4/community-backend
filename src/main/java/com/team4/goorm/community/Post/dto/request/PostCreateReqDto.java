@@ -1,7 +1,6 @@
 package com.team4.goorm.community.Post.dto.request;
 
-import java.lang.reflect.Member;
-
+import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
 
@@ -24,23 +23,23 @@ public class PostCreateReqDto {
     @Schema(description = "작성자 ID", example = "1")
     private Long memberId;
 
-    public Post toEntity(Long memberId, String thumbnailImageUrl) {
+    public Post toEntity(Member member, String thumbnailImageUrl) {
         return Post.builder()
                 .title(title)
                 .content(content)
                 .category(category)
                 .thumbnailImageUrl(thumbnailImageUrl)
-                .memberId(memberId)
+                .member(member)
                 .build();
     }
 
-    public Post toEntity(Long memberId) {
+    public Post toEntity(Member member) {
         return Post.builder()
                 .title(title)
                 .content(content)
                 .category(category)
                 .thumbnailImageUrl(thumbnailImageUrl)
-                .memberId(memberId)
+                .member(member)
                 .build();
     }
 }

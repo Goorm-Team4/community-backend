@@ -31,7 +31,7 @@ public class Post extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false)
-	private Long memberId;
+	private Member member;
 
 	@Column(name = "like_count")
 	private Long likeCount = 0L;
@@ -43,13 +43,17 @@ public class Post extends BaseEntity {
 	private String thumbnailImageUrl;
 
 	@Builder
-	public Post(String title, String content, Category category, Long memberId, String thumbnailImageUrl) {
+	public Post(Long postId, String title, String content, Category category, Member member, Long likeCount, Long commentCount, String thumbnailImageUrl) {
+		this.postId = postId;
 		this.title = title;
 		this.content = content;
 		this.category = category;
-		this.memberId = memberId;
+		this.member = member;
+		this.likeCount = likeCount;
+		this.commentCount = commentCount;
 		this.thumbnailImageUrl = thumbnailImageUrl;
 	}
+
 
 	public void update(String content, String imageUrl, Category category) {
 		this.content = content;

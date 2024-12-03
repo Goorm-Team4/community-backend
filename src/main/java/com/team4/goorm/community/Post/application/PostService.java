@@ -40,7 +40,7 @@ public class PostService {
     public PostInfoRespDto createPost(PostCreateReqDto request, MultipartFile postImage, String user) {
         String imageUrl = amazonS3Service.uploadImage(postImage);
         Member member = memberQueryService.findMemberByEmail(user);
-        Post post = request.toEntity(member.getMemberId(), imageUrl);
+        Post post = request.toEntity(member, imageUrl);
         Post savedPost = postRepository.save(post);
         return PostInfoRespDto.from(savedPost);
     }

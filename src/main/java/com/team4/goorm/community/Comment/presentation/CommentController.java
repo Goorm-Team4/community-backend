@@ -31,4 +31,20 @@ public class CommentController {
         return ResponseEntity.ok(SuccessResponse.success(commentService.getCommentsByMember(user.getEmail())));
     }
 
+    @Operation(summary = "댓글 작성")
+    @GetMapping("/comments/write")
+    public ResponseEntity<SuccessResponse<String>> createComment(
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        return ResponseEntity.ok(SuccessResponse.success("댓글 작성 성공"));
+    }
+
+    // @Operation(summary = "게시글의 댓글 조회")
+    // @GetMapping("/post/{postId}")
+    // public ResponseEntity<SuccessResponse<List<CommentInfoRespDto>> getCommentsByPost(
+    //         @PathVariable Long postId
+    // ) {
+    //     return ResponseEntity.ok(SuccessResponse.success(commentService.getCommentsByPost(postId)));
+    // }
+
 }

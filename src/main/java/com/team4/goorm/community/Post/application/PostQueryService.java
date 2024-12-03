@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,5 +21,18 @@ public class PostQueryService {
         return postRepository.findAllByMemberOrderByCreatedAtDesc(member);
 //        MemberPostCond condition = new MemberPostCond(member);
 //        return postRepository.searchByMember(condition);
+    }
+
+    public Post findById(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 존재하지 않습니다."));
+    }
+
+    public List<Post> findAllByOrderByCreatedAtDesc() {
+        return postRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    public Post findByTitle(String title) {
+        return postRepository.findByTitle(title)
+                .orElseThrow(() -> new IllegalArgumentException("해당 제목의 게시글이 존재하지 않습니다."));
     }
 }

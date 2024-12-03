@@ -5,6 +5,7 @@ import com.team4.goorm.community.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,7 +31,7 @@ public class Post extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "member_id", nullable = false)
-	private Member member;
+	private Long memberId;
 
 	@Column(name = "like_count")
 	private Long likeCount = 0L;
@@ -40,4 +41,19 @@ public class Post extends BaseEntity {
 
 	@Column(name = "thumbnail_image_url")
 	private String thumbnailImageUrl;
+
+	@Builder
+	public Post(String title, String content, Category category, Long memberId, String thumbnailImageUrl) {
+		this.title = title;
+		this.content = content;
+		this.category = category;
+		this.memberId = memberId;
+		this.thumbnailImageUrl = thumbnailImageUrl;
+	}
+
+	public void update(String content, String imageUrl, Category category) {
+		this.content = content;
+		this.thumbnailImageUrl = imageUrl;
+		this.category = category;
+	}
 }

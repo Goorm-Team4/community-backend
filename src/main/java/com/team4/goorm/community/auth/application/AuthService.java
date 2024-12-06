@@ -27,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
+import static com.team4.goorm.community.auth.exception.AuthErrorCode.PASSWORD_NOT_CHANGED;
+
 @Slf4j
 @RequiredArgsConstructor
 @Transactional
@@ -130,8 +132,12 @@ public class AuthService {
 
 		verifyPassword(request.getCurrentPassword(), member.getPassword());
 
+		if (request.getCurrentPassword().equals(request.getNewPassword())) {
+			throw new AuthException(PASSWORD_NOT_CHANGED);
+		}
+
 		// 새로운 비밀번호로 변경
-		member.setEncryptedPassword(request.getNewPassword());
+		member.setEncryptedPassword(passwordEncoder.encode(request.getNewPassword()));
 	}
 
 	private void verifyPassword(String rawPassword, String encodedPassword) {

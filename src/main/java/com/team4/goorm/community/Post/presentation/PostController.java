@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -40,7 +41,6 @@ public class PostController {
         return ResponseEntity.ok(SuccessResponse.success(postService.getPostsByMember(user.getEmail())));
     }
 
-
     @Operation(summary = "게시글 작성", description = "Contnet-type info는 application/json으로 요청해주세요. (이미지는 url말고 파일 보내주셔야합니다.)")
     @PostMapping(consumes = "multipart/form-data")
     public ResponseEntity<SuccessResponse<PostInfoRespDto>> createMyPost(
@@ -61,7 +61,7 @@ public class PostController {
     }
 
     @Operation(summary = "게시글 수정", description = "Contnet-type info는 application/json으로 요청해주세요. (이미지는 url말고 파일 보내주셔야합니다.)")
-    @PostMapping(value = "/{postId}", consumes = "multipart/form-data")
+    @PutMapping(value = "/{postId}", consumes = "multipart/form-data")
     public ResponseEntity<SuccessResponse<PostInfoRespDto>> updateMyPost(
             @PathVariable Long postId,
             @RequestPart("content") PostCreateReqDto request,
@@ -79,7 +79,7 @@ public class PostController {
     }
 
     @Operation(summary = "게시글 전체 조회")
-    @GetMapping("?category={category}&page={page}&size={size}&sort={sort}")
+    @GetMapping()
     public ResponseEntity<SuccessResponse<List<PostInfoRespDto>>> getAllPosts(
         @RequestParam String category,
         @RequestParam int page,
@@ -89,8 +89,9 @@ public class PostController {
         return ResponseEntity.ok(SuccessResponse.success(postService.getAllPosts(page, size, sort)));
     }
 
+    //JPQL로 수정, like 절 사용, list로 반환
     @Operation(summary = "게시글 제목 조회")
-    @GetMapping("/search?title={title}")
+    @GetMapping("/search")
     public ResponseEntity<SuccessResponse<PostInfoRespDto>> getPostsByTitle(
         @RequestParam String title
     ) {

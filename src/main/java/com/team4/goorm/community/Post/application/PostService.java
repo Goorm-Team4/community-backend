@@ -50,10 +50,11 @@ public class PostService {
         postRepository.delete(post);
     }
 
+    // request 추가
     public PostInfoRespDto updatePost(Long postId, PostCreateReqDto request, MultipartFile postImage) {
         Post post = postQueryService.findById(postId);
         String imageUrl = amazonS3Service.uploadImage(postImage);
-        post.update(request.getContent(), imageUrl,request.getCategory());
+        post.update(request.getTitle(), request.getContent(), imageUrl, request.getCategory());
         return PostInfoRespDto.from(post);
     }
 
@@ -62,6 +63,7 @@ public class PostService {
         return PostInfoRespDto.from(post);
     }
 
+    // 로직바꾸기, 조건문 추가
     public List<PostInfoRespDto> getAllPosts(int page, int size, String sort) {
         List<Post> posts = postQueryService.findAllByOrderByCreatedAtDesc();
         return posts.stream()

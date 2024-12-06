@@ -20,8 +20,7 @@ public class PostCreateReqDto {
     private Category category;
     @Schema(description = "게시글 썸네일 URL", example = "http://goorm.com/image.jpg")
     private String thumbnailImageUrl;
-    @Schema(description = "작성자 ID", example = "1")
-    private Long memberId;
+
 
     public Post toEntity(Member member, String thumbnailImageUrl) {
         return Post.builder()

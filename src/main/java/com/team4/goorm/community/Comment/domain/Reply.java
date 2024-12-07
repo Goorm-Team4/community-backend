@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,16 @@ public class Reply extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "comment_id", nullable = false)
     private Comment comment;
+
+    @Builder
+    public Reply(Long replyId, String content, Long likeCount, Comment comment) {
+        this.replyId = replyId;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.comment = comment;
+    }
+
+    public void update(String content) {
+        this.content = content;
+    }
 }

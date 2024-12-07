@@ -5,6 +5,7 @@ import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,5 +15,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      List<Post> findAllByMemberOrderByCreatedAtDesc(Member member);
      List<Post> findAllByOrderByCreatedAtDesc();
      Optional<Post> findByTitle(String title);
+     @EntityGraph(attributePaths = {"member", "comments"})
      Page<Post> findAllByCategory(Category category, Pageable pageable);
+     @EntityGraph(attributePaths = {"member", "comments"})
+     Page<Post> findAll(Pageable pageable);
 }

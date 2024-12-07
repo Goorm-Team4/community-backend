@@ -22,7 +22,7 @@ public class Post extends BaseEntity {
 	@Column(nullable = false)
 	private String title;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "MEDIUMTEXT")
 	private String content;
 
 	@Enumerated(EnumType.STRING)
@@ -53,7 +53,6 @@ public class Post extends BaseEntity {
 		this.commentCount = commentCount;
 		this.thumbnailImageUrl = thumbnailImageUrl;
 	}
-
 
 	public void update(String title, String content, String imageUrl, Category category) {
 		this.title = title;

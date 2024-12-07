@@ -1,5 +1,7 @@
 package com.team4.goorm.community.Post.application;
 
+import com.team4.goorm.community.Comment.application.CommentQueryService;
+import com.team4.goorm.community.Comment.domain.Comment;
 import com.team4.goorm.community.Member.application.MemberQueryService;
 import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Post.domain.Category;
@@ -7,6 +9,7 @@ import com.team4.goorm.community.Post.domain.Post;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
 import com.team4.goorm.community.Post.dto.request.PostPageReqDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
+import com.team4.goorm.community.Post.dto.response.PostDetailRespDto;
 import com.team4.goorm.community.Post.dto.response.PostListRespDto;
 import com.team4.goorm.community.Post.repository.PostRepository;
 import com.team4.goorm.community.image.service.AmazonS3Service;
@@ -27,6 +30,7 @@ public class PostService {
     private final MemberQueryService memberQueryService;
     private final AmazonS3Service amazonS3Service;
     private final PostRepository postRepository;
+    private final CommentQueryService commentQueryService;
 
     @Transactional(readOnly = true)
     public List<PostInfoRespDto> getPostsByMember(String email) {
@@ -59,9 +63,11 @@ public class PostService {
         return PostInfoRespDto.from(post);
     }
 
-    public PostInfoRespDto getPost(Long postId) {
+    @Transactional(readOnly = true)
+    public PostDetailRespDto getPost(Long postId) {
         Post post = postQueryService.findById(postId);
-        return PostInfoRespDto.from(post);
+        List<Comment> comments = commentQueryService.findAllByPost(post);
+        return PostDetailRespDto.of(post, comments);
     }
 
     @Transactional(readOnly = true)

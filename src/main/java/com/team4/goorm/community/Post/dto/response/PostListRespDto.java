@@ -1,6 +1,7 @@
 package com.team4.goorm.community.Post.dto.response;
 
 import com.team4.goorm.community.Post.domain.Post;
+import com.team4.goorm.community.Post.dto.PostSummaryDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -15,9 +16,9 @@ import java.util.List;
 public class PostListRespDto {
 
     private int totalPage;
-    private List<PostInfoRespDto> posts;
+    private List<PostSummaryDto> posts;
 
-    public PostListRespDto(int totalPage, List<PostInfoRespDto> posts) {
+    public PostListRespDto(int totalPage, List<PostSummaryDto> posts) {
         this.totalPage = totalPage;
         this.posts = posts;
     }
@@ -25,7 +26,7 @@ public class PostListRespDto {
     public static PostListRespDto from(Page<Post> posts) {
         return new PostListRespDto(posts.getTotalPages(),
                 posts.getContent().stream()
-                        .map(PostInfoRespDto::from)
+                        .map(PostSummaryDto::from)
                         .toList());
     }
 }

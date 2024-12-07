@@ -3,6 +3,7 @@ package com.team4.goorm.community.Post.presentation;
 import com.team4.goorm.community.Post.application.PostService;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
+import com.team4.goorm.community.Post.dto.response.PostDetailRespDto;
 import com.team4.goorm.community.Post.dto.response.PostListRespDto;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
@@ -64,7 +65,7 @@ public class PostController {
 
     @Operation(summary = "게시글 조회")
     @GetMapping("/{postId}")
-    public ResponseEntity<SuccessResponse<PostInfoRespDto>> getPost(
+    public ResponseEntity<SuccessResponse<PostDetailRespDto>> getPost(
             @PathVariable Long postId
     ) {
         return ResponseEntity.ok(SuccessResponse.success(postService.getPost(postId)));

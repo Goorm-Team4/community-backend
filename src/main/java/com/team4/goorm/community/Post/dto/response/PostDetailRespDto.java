@@ -1,9 +1,11 @@
 package com.team4.goorm.community.Post.dto.response;
 
+import com.team4.goorm.community.Comment.domain.Comment;
 import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Member.dto.response.ProfileSummaryDto;
 import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
+import com.team4.goorm.community.Post.dto.PostCommentInfoDto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -11,11 +13,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
-@Schema(description = "게시글 정보 응답 DTO")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostInfoRespDto {
+public class PostDetailRespDto {
 
     @Schema(description = "게시글 ID", example = "1")
     private Long postId;
@@ -35,22 +37,26 @@ public class PostInfoRespDto {
     private Long  commentCount = 0L;
     @Schema(description = "작성자 정보")
     private ProfileSummaryDto author;
+    @Schema(description = "댓글 정보")
+    private List<PostCommentInfoDto> comments;
 
     @Builder
-    public PostInfoRespDto(Long postId, String title, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author) {
+    public PostDetailRespDto(Long postId, String title, String content, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author, List<PostCommentInfoDto> comments) {
         this.postId = postId;
         this.title = title;
+        this.content = content;
         this.category = category;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
         this.likeCount = likeCount;
         this.commentCount = commentCount;
         this.author = author;
+        this.comments = comments;
     }
 
-    public static PostInfoRespDto from(Post post) {
+    public static PostDetailRespDto of(Post post, List<Comment> comments) {
         Member member = post.getMember();
-        return PostInfoRespDto.builder()
+        return PostDetailRespDto.builder()
                 .postId(post.getPostId())
                 .author(ProfileSummaryDto.from(member))
                 .title(post.getTitle())
@@ -59,6 +65,9 @@ public class PostInfoRespDto {
                 .createdAt(post.getCreatedAt())
                 .likeCount(post.getLikeCount())
                 .commentCount(post.getCommentCount())
+                .comments(comments.stream()
+                        .map(comment -> PostCommentInfoDto.from(comment, member.getMemberId()))
+                        .toList())
                 .build();
     }
 }

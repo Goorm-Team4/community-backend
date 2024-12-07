@@ -1,16 +1,17 @@
 package com.team4.goorm.community.Post.application;
 
-import com.team4.goorm.community.Comment.domain.Comment;
 import com.team4.goorm.community.Member.application.MemberQueryService;
 import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
+import com.team4.goorm.community.Post.dto.request.PostPageReqDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
+import com.team4.goorm.community.Post.dto.response.PostListRespDto;
 import com.team4.goorm.community.Post.repository.PostRepository;
-import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.image.service.AmazonS3Service;
-
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -63,12 +64,15 @@ public class PostService {
         return PostInfoRespDto.from(post);
     }
 
-    // 로직바꾸기, 조건문 추가
-    public List<PostInfoRespDto> getAllPosts(int page, int size, String sort) {
-        List<Post> posts = postQueryService.findAllByOrderByCreatedAtDesc();
-        return posts.stream()
-                .map(PostInfoRespDto::from)
-                .toList();
+    @Transactional(readOnly = true)
+    public PostListRespDto getAllPosts(String category, int page, String sortBy, String direction) {
+        Pageable pageable = new PostPageReqDto(page, sortBy, direction).toPageable();
+
+        if (category != null) {
+            return PostListRespDto.from(postQueryService.findAllByCategory(Category.fromName(category), pageable));
+        } else {
+            return PostListRespDto.from(postQueryService.findAll(pageable));
+        }
     }
 
     public PostInfoRespDto getPostsByTitle(String title) {
@@ -80,6 +84,4 @@ public class PostService {
     //     Member member = memberQueryService.findMemberByEmail(email);
     //     post.toggleLike(member);
     // }
-
-
 }

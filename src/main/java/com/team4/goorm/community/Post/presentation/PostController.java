@@ -3,24 +3,16 @@ package com.team4.goorm.community.Post.presentation;
 import com.team4.goorm.community.Post.application.PostService;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
+import com.team4.goorm.community.Post.dto.response.PostListRespDto;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-
-import org.hibernate.query.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -80,13 +72,17 @@ public class PostController {
 
     @Operation(summary = "게시글 전체 조회")
     @GetMapping()
-    public ResponseEntity<SuccessResponse<List<PostInfoRespDto>>> getAllPosts(
-        @RequestParam String category,
-        @RequestParam int page,
-        @RequestParam int size,
-        @RequestParam String sort
+    public ResponseEntity<SuccessResponse<PostListRespDto>> getAllPosts(
+        @Parameter(description = "현 카테고리: 카테고리1, 카테고리2, 카테고리3", example = "카테고리1")
+        @RequestParam(required = false) String  category,
+        @Parameter(example = "1")
+        @RequestParam(required = false, defaultValue = "1") int page,
+        @Parameter(description = "createdAt(날짜순), likeCount(좋아요순)", example = "createdAt")
+        @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
+        @Parameter(description = "asc(오름차순), desc(내림차순)", example = "desc")
+        @RequestParam(required = false, defaultValue = "desc") String direction
     ) {
-        return ResponseEntity.ok(SuccessResponse.success(postService.getAllPosts(page, size, sort)));
+        return ResponseEntity.ok(SuccessResponse.success(postService.getAllPosts(category, page, sortBy, direction)));
     }
 
     //JPQL로 수정, like 절 사용, list로 반환

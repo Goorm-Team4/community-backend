@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.SecureRandom;
 import java.util.concurrent.TimeUnit;
 
+import static com.team4.goorm.community.auth.exception.AuthErrorCode.EMAIL_ALREADY_EXISTS;
 import static com.team4.goorm.community.auth.exception.AuthErrorCode.PASSWORD_NOT_CHANGED;
 
 @Slf4j
@@ -51,6 +52,10 @@ public class AuthService {
 	private static final int PASSWORD_LENGTH = 12;
 
 	public void signup(SignupReqDto request, MultipartFile profileImage) {
+		if (memberRepository.existsByEmail(request.getEmail())) {
+			throw new AuthException(EMAIL_ALREADY_EXISTS);
+		}
+
 		// s3에 이미지 업로드
 		String imageUrl = amazonS3Service.uploadImage(profileImage);
 		Member member = request.toEntity(imageUrl);
@@ -161,12 +166,12 @@ public class AuthService {
 	 * 랜덤 임시 비밀번호 생성
 	 */
 	public static String generateTempPassword(){
-		StringBuilder str = new StringBuilder(PASSWORD_LENGTH);
+		StringBuilder builder = new StringBuilder(PASSWORD_LENGTH);
 		for (int i = 0; i < PASSWORD_LENGTH; i++) {
 			int idx = RANDOM.nextInt(CHAR_SET.length);
-			str.append(CHAR_SET[idx]);
+			builder.append(CHAR_SET[idx]);
 		}
-		return str.toString();
+		return builder.toString();
 	}
 
 	@Transactional(readOnly = true)

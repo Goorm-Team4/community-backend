@@ -1,6 +1,7 @@
 package com.team4.goorm.community.Member.application;
 
 import com.team4.goorm.community.Member.domain.Member;
+import com.team4.goorm.community.Member.dto.request.UpdateMemberProfileReqDto;
 import com.team4.goorm.community.Member.dto.response.ProfileInfoRespDto;
 import com.team4.goorm.community.image.service.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +18,7 @@ public class MemberService {
     private final MemberQueryService memberQueryService;
     private final AmazonS3Service amazonS3Service;
 
-    public ProfileInfoRespDto updateMyProfile(String username, MultipartFile profileImage, String email) {
+    public ProfileInfoRespDto updateMyProfile(UpdateMemberProfileReqDto request, MultipartFile profileImage, String email) {
         Member member = memberQueryService.findMemberByEmail(email);
 
         // 이미지 업로드
@@ -26,7 +27,7 @@ public class MemberService {
             imageUrl = amazonS3Service.uploadImage(profileImage);
         }
 
-        memberCommandService.updateMemberProfile(member, username, imageUrl);
+        memberCommandService.updateMemberProfile(member, request.getUsername(), imageUrl);
         return ProfileInfoRespDto.from(member);
     }
 }

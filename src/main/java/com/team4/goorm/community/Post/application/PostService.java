@@ -6,11 +6,13 @@ import com.team4.goorm.community.Member.application.MemberQueryService;
 import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
+import com.team4.goorm.community.Post.domain.PostLike;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
 import com.team4.goorm.community.Post.dto.request.PostPageReqDto;
-import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
 import com.team4.goorm.community.Post.dto.response.PostDetailRespDto;
+import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
 import com.team4.goorm.community.Post.dto.response.PostListRespDto;
+import com.team4.goorm.community.Post.repository.PostLikeRepository;
 import com.team4.goorm.community.Post.repository.PostRepository;
 import com.team4.goorm.community.image.service.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,8 @@ public class PostService {
     private final AmazonS3Service amazonS3Service;
     private final PostRepository postRepository;
     private final CommentQueryService commentQueryService;
+    private final PostLikeQueryService postLikeQueryService;
+    private final PostLikeRepository postLikeRepository;
 
     @Transactional(readOnly = true)
     public List<PostInfoRespDto> getPostsByMember(String email) {
@@ -83,6 +87,20 @@ public class PostService {
 
     public PostInfoRespDto getPostsByTitle(String title) {
         return PostInfoRespDto.from(postQueryService.findByTitle(title));
+    }
+
+    public void toggleLike(Long postId, String email) {
+        Post post = postQueryService.findById(postId);
+        Member member = memberQueryService.findMemberByEmail(email);
+        PostLike postLike = postLikeQueryService.findByPostAndMember(post, member);
+
+        if (postLike != null) {
+            post.decreaseLikeCount();
+            postLikeRepository.delete(postLike);
+        } else {
+            postLikeRepository.save(new PostLike(post, member));
+            post.increaseLikeCount();
+        }
     }
 
     // public void toggleLike(Long postId, String email) {

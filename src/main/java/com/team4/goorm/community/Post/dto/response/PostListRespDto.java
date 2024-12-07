@@ -15,7 +15,9 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostListRespDto {
 
+    @Schema(description = "총 페이지 수", example = "10")
     private int totalPage;
+    @Schema(description = "게시글 리스트")
     private List<PostSummaryDto> posts;
 
     public PostListRespDto(int totalPage, List<PostSummaryDto> posts) {

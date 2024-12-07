@@ -60,4 +60,12 @@ public class Post extends BaseEntity {
 		this.thumbnailImageUrl = imageUrl;
 		this.category = category;
 	}
+
+	public void increaseLikeCount() {
+		this.likeCount++;
+	}
+
+	public void decreaseLikeCount() {
+		this.likeCount--;
+	}
 }

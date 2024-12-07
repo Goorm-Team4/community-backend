@@ -66,6 +66,7 @@ public class PostController {
     @Operation(summary = "게시글 조회")
     @GetMapping("/{postId}")
     public ResponseEntity<SuccessResponse<PostDetailRespDto>> getPost(
+            @Parameter(description = "게시글 ID", example = "1")
             @PathVariable Long postId
     ) {
         return ResponseEntity.ok(SuccessResponse.success(postService.getPost(postId)));
@@ -76,11 +77,11 @@ public class PostController {
     public ResponseEntity<SuccessResponse<PostListRespDto>> getAllPosts(
         @Parameter(description = "현 카테고리: 카테고리1, 카테고리2, 카테고리3", example = "카테고리1")
         @RequestParam(required = false) String  category,
-        @Parameter(example = "1")
+        @Parameter(description = "페이지 번호", example = "1")
         @RequestParam(required = false, defaultValue = "1") int page,
-        @Parameter(description = "createdAt(날짜순), likeCount(좋아요순)", example = "createdAt")
+        @Parameter(description = "정렬 기준: createdAt(날짜순), likeCount(좋아요순)", example = "createdAt")
         @RequestParam(required = false, defaultValue = "createdAt") String sortBy,
-        @Parameter(description = "asc(오름차순), desc(내림차순)", example = "desc")
+        @Parameter(description = "정렬 방향: asc(오름차순), desc(내림차순)", example = "desc")
         @RequestParam(required = false, defaultValue = "desc") String direction
     ) {
         return ResponseEntity.ok(SuccessResponse.success(postService.getAllPosts(category, page, sortBy, direction)));
@@ -95,14 +96,14 @@ public class PostController {
         return ResponseEntity.ok(SuccessResponse.success(postService.getPostsByTitle(title)));
     }
 
-    // @Operation(summary = "게시글 좋아요 토글")
-    // @PostMapping("/{postId}/like/toggle")
-    // public ResponseEntity<SuccessResponse<String>> toggleLike(
-    //     @PathVariable Long postId,
-    //     @AuthenticationPrincipal CustomUserDetails user
-    // ) {
-    //     postService.toggleLike(postId, user.getEmail());
-    //     return ResponseEntity.ok(SuccessResponse.success("좋아요 토글 성공"));
-    // }
-
+     @Operation(summary = "게시글 좋아요 토글")
+     @PatchMapping("/{postId}/like/toggle")
+     public ResponseEntity<SuccessResponse<String>> toggleLike(
+             @Parameter(description = "게시글 ID", example = "1")
+             @PathVariable Long postId,
+             @AuthenticationPrincipal CustomUserDetails user
+     ) {
+         postService.toggleLike(postId, user.getEmail());
+         return ResponseEntity.ok(SuccessResponse.success("좋아요 토글 성공"));
+     }
 }

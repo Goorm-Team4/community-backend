@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PostPageReqDto implements PageReqDto {
 
     private int page;
-    private final int size = 3 * 7;
+    private final int size = 3 * 7; // 한 페이지당 게시글 수
     private String sortBy;
     private String direction;
 

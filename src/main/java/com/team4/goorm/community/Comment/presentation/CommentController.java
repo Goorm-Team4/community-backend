@@ -6,17 +6,13 @@ import com.team4.goorm.community.Comment.dto.response.CommentInfoRespDto;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -68,4 +64,14 @@ public class CommentController {
         return ResponseEntity.ok(SuccessResponse.success("댓글 삭제 성공"));
     }
 
+    @Operation(summary = "댓글 좋아요 토글")
+    @PatchMapping("/{commentId}/like/toggle")
+    public ResponseEntity<SuccessResponse<String>> toggleLike(
+            @Parameter(description = "댓글 ID", example = "1")
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal CustomUserDetails user
+    ) {
+        commentService.toggleLike(commentId, user.getEmail());
+        return ResponseEntity.ok(SuccessResponse.success("댓글 좋아요 토글 성공"));
+    }
 }

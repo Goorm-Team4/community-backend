@@ -104,6 +104,6 @@ public class PostController {
              @AuthenticationPrincipal CustomUserDetails user
      ) {
          postService.toggleLike(postId, user.getEmail());
-         return ResponseEntity.ok(SuccessResponse.success("좋아요 토글 성공"));
+         return ResponseEntity.ok(SuccessResponse.success("게시글 좋아요 토글 성공"));
      }
 }

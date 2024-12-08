@@ -12,6 +12,4 @@ public class UpdateMemberProfileReqDto {
 
     @Schema(description = "닉네임", example = "구름")
     private String username;
-    @Schema(description = "프로필 이미지 URL", example = "http://goorm.com/profile.jpg")
-    private String profileImageUrl;
 }

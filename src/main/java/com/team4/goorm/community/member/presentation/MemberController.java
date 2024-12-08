@@ -2,6 +2,7 @@ package com.team4.goorm.community.Member.presentation;
 
 import com.team4.goorm.community.Member.application.MemberQueryService;
 import com.team4.goorm.community.Member.application.MemberService;
+import com.team4.goorm.community.Member.dto.request.UpdateMemberProfileReqDto;
 import com.team4.goorm.community.Member.dto.response.ProfileInfoRespDto;
 import com.team4.goorm.community.auth.domain.CustomUserDetails;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
@@ -37,10 +38,10 @@ public class MemberController {
     @PatchMapping(value = "/me", consumes = "multipart/form-data")
     public ResponseEntity<SuccessResponse<ProfileInfoRespDto>> updateMyProfile(
             @RequestPart(value = "image", required = false) MultipartFile profileImage,
-            @RequestPart(required = false) String username,
+            @RequestPart(required = false) UpdateMemberProfileReqDto request,
             @AuthenticationPrincipal CustomUserDetails user
     ) {
         return ResponseEntity.ok(SuccessResponse.success(
-                memberService.updateMyProfile(username, profileImage, user.getEmail())));
+                memberService.updateMyProfile(request, profileImage, user.getEmail())));
     }
 }

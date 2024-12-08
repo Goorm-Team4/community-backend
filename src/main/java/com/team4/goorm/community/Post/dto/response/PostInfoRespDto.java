@@ -37,9 +37,10 @@ public class PostInfoRespDto {
     private ProfileSummaryDto author;
 
     @Builder
-    public PostInfoRespDto(Long postId, String title, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author) {
+    public PostInfoRespDto(Long postId, String title, String content, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author) {
         this.postId = postId;
         this.title = title;
+        this.content = content;
         this.category = category;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
@@ -54,6 +55,7 @@ public class PostInfoRespDto {
                 .postId(post.getPostId())
                 .author(ProfileSummaryDto.from(member))
                 .title(post.getTitle())
+                .content(post.getContent())
                 .category(post.getCategory())
                 .imageUrl(post.getThumbnailImageUrl())
                 .createdAt(post.getCreatedAt())

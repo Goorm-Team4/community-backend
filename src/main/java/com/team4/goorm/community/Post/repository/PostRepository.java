@@ -15,8 +15,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
      List<Post> findAllByMemberOrderByCreatedAtDesc(Member member);
      List<Post> findAllByOrderByCreatedAtDesc();
      Optional<Post> findByTitle(String title);
-     @EntityGraph(attributePaths = {"member", "comments"})
+     @EntityGraph(attributePaths = {"member"})
      Page<Post> findAllByCategory(Category category, Pageable pageable);
-     @EntityGraph(attributePaths = {"member", "comments"})
+     @EntityGraph(attributePaths = {"member"})
      Page<Post> findAll(Pageable pageable);
 }

@@ -8,7 +8,7 @@ import com.team4.goorm.community.Post.domain.Category;
 import com.team4.goorm.community.Post.domain.Post;
 import com.team4.goorm.community.Post.domain.PostLike;
 import com.team4.goorm.community.Post.dto.request.PostCreateReqDto;
-import com.team4.goorm.community.Post.dto.request.PostPageReqDto;
+import com.team4.goorm.community.Post.dto.request.PostPageDto;
 import com.team4.goorm.community.Post.dto.response.PostDetailRespDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
 import com.team4.goorm.community.Post.dto.response.PostListRespDto;
@@ -76,10 +76,10 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostListRespDto getAllPosts(String category, int page, String sortBy, String direction) {
-        Pageable pageable = new PostPageReqDto(page, sortBy, direction).toPageable();
+        Pageable pageable = new PostPageDto(page, sortBy, direction).toPageable();
 
         if (category != null) {
-            return PostListRespDto.from(postQueryService.findAllByCategory(Category.fromName(category), pageable));
+            return PostListRespDto.from(postQueryService.findAllByCategory(Category.valueOf(category), pageable));
         } else {
             return PostListRespDto.from(postQueryService.findAll(pageable));
         }

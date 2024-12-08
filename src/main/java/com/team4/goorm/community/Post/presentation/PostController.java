@@ -75,7 +75,7 @@ public class PostController {
     @Operation(summary = "게시글 전체 조회")
     @GetMapping()
     public ResponseEntity<SuccessResponse<PostListRespDto>> getAllPosts(
-        @Parameter(description = "현 카테고리: 카테고리1, 카테고리2, 카테고리3", example = "카테고리1")
+        @Parameter(description = "현 카테고리: C1, C2, C3 / 전체 조회 시 해당 값 제외하고 요청주세요.", example = "C1")
         @RequestParam(required = false) String  category,
         @Parameter(description = "페이지 번호", example = "1")
         @RequestParam(required = false, defaultValue = "1") int page,

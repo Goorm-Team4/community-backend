@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Schema(description = "게시글 정보 응답 DTO")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostSummaryDto {

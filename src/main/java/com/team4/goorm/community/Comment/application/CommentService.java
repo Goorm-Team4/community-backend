@@ -60,13 +60,22 @@ public class CommentService {
     public void toggleLike(Long commentId, String email) {
         Comment comment = commentQueryService.findById(commentId);
         Member member = memberQueryService.findMemberByEmail(email);
-        CommentLike commentLike = commentLikeQueryService.findByCommentAndMember(comment, member);
+
+        commentLikeRepository.findByCommentAndMember(comment, member)
+                .ifPresentOrElse(
+                        (commentLike) -> {
+                            comment.decreaseLikeCount();
+                            commentLikeRepository.delete(commentLike);
+                        },
+                        () -> {
+                            comment.increaseLikeCount();
+                            commentLikeRepository.save(new CommentLike(comment, member));
+                        }
 
         if (commentLike != null) {
-            comment.decreaseLikeCount();
-            commentLikeRepository.delete(commentLike);
+
         } else {
-            comment.increaseLikeCount();
+
             commentLikeRepository.save(new CommentLike(comment, member));
         }
     }

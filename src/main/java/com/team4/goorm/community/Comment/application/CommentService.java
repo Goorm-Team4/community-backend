@@ -70,13 +70,6 @@ public class CommentService {
                         () -> {
                             comment.increaseLikeCount();
                             commentLikeRepository.save(new CommentLike(comment, member));
-                        }
-
-        if (commentLike != null) {
-
-        } else {
-
-            commentLikeRepository.save(new CommentLike(comment, member));
-        }
+                        });
     }
 }

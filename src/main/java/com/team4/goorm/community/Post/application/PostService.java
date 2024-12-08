@@ -92,16 +92,19 @@ public class PostService {
     public void toggleLike(Long postId, String email) {
         Post post = postQueryService.findById(postId);
         Member member = memberQueryService.findMemberByEmail(email);
-        PostLike postLike = postLikeQueryService.findByPostAndMember(post, member);
 
-        if (postLike != null) {
-            post.decreaseLikeCount();
-            postLikeRepository.delete(postLike);
-        } else {
-            postLikeRepository.save(new PostLike(post, member));
-            post.increaseLikeCount();
-        }
+       postLikeRepository.findByPostAndMember(post, member)
+                .ifPresentOrElse(
+                        (like) -> {
+                            post.decreaseLikeCount();
+                            postLikeRepository.delete(like);
+                        },
+                        () -> {
+                            post.increaseLikeCount();
+                            postLikeRepository.save(new PostLike(post, member));
+                        });
     }
+
 
     // public void toggleLike(Long postId, String email) {
     //     Post post = postQueryService.findById(postId);

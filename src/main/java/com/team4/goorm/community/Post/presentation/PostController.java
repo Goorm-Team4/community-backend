@@ -47,9 +47,10 @@ public class PostController {
     @Operation(summary = "게시글 삭제")
     @DeleteMapping("/{postId}")
     public ResponseEntity<SuccessResponse<String>> deleteMyPost(
-            @PathVariable Long postId
+            @PathVariable Long postId,
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
-        postService.deletePost(postId);
+        postService.deletePost(postId, user.getEmail());
         return ResponseEntity.ok(SuccessResponse.success("게시글 삭제 성공"));
     }
 
@@ -58,9 +59,10 @@ public class PostController {
     public ResponseEntity<SuccessResponse<PostInfoRespDto>> updateMyPost(
             @PathVariable Long postId,
             @RequestPart("content") PostCreateReqDto request,
-            @RequestPart(value = "image", required = false) MultipartFile postImage
+            @RequestPart(value = "image", required = false) MultipartFile postImage,
+            @AuthenticationPrincipal CustomUserDetails user
     ) {
-        return ResponseEntity.ok(SuccessResponse.success("게시글 수정 성공",postService.updatePost(postId, request, postImage)));
+        return ResponseEntity.ok(SuccessResponse.success("게시글 수정 성공",postService.updatePost(postId, request, postImage, user.getEmail())));
     }
 
     @Operation(summary = "게시글 조회")

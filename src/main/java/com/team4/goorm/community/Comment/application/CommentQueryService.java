@@ -1,12 +1,15 @@
 package com.team4.goorm.community.Comment.application;
 
 import com.team4.goorm.community.Comment.domain.Comment;
+import com.team4.goorm.community.Comment.exception.CommentException;
 import com.team4.goorm.community.Comment.repository.CommentRepository;
 import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Post.domain.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.team4.goorm.community.Comment.exception.CommentErrorCode.COMMENT_NOT_FOUND;
 
 import java.util.List;
 
@@ -23,7 +26,7 @@ public class CommentQueryService {
 
     public Comment findById(Long commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CommentException(COMMENT_NOT_FOUND));
     }
 
     public List<Comment> findAllByPost(Post post) {

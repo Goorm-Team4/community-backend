@@ -49,8 +49,8 @@ public class Post extends BaseEntity {
 		this.content = content;
 		this.category = category;
 		this.member = member;
-		this.likeCount = likeCount;
-		this.commentCount = commentCount;
+		this.likeCount = likeCount != null ? likeCount : 0L;
+		this.commentCount = commentCount != null ? commentCount : 0L;
 		this.thumbnailImageUrl = thumbnailImageUrl;
 	}
 

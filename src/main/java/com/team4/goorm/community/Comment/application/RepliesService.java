@@ -7,9 +7,12 @@ import com.team4.goorm.community.Comment.domain.Comment;
 import com.team4.goorm.community.Comment.domain.Reply;
 import com.team4.goorm.community.Comment.dto.request.RepliesCreateReqDto;
 import com.team4.goorm.community.Comment.dto.response.RepliesInfoRespDto;
+import com.team4.goorm.community.Comment.exception.ReplyException;
 import com.team4.goorm.community.Comment.repository.ReplyRepository;
 import com.team4.goorm.community.Member.application.MemberQueryService;
 import com.team4.goorm.community.Member.domain.Member;
+
+import static com.team4.goorm.community.Comment.exception.ReplyErrorCode.REPLY_NOT_FOUND;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +38,7 @@ public class RepliesService {
     public RepliesInfoRespDto updateReply(RepliesCreateReqDto request, String user, Long replyId) {
         Member member = memberQueryService.findMemberByEmail(user);
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 답글이 존재하지 않습니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_FOUND));
         reply.update(request.getContent());
         return RepliesInfoRespDto.from(reply);
     }
@@ -43,7 +46,7 @@ public class RepliesService {
     public String deleteReply(String user, Long replyId) {
         Member member = memberQueryService.findMemberByEmail(user);
         Reply reply = replyRepository.findById(replyId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 답글이 존재하지 않습니다."));
+                .orElseThrow(() -> new ReplyException(REPLY_NOT_FOUND));
         replyRepository.delete(reply);
         return "답글 삭제 성공";
     }

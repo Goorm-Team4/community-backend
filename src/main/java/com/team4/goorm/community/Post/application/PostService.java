@@ -12,6 +12,7 @@ import com.team4.goorm.community.Post.dto.request.PostPageDto;
 import com.team4.goorm.community.Post.dto.response.PostDetailRespDto;
 import com.team4.goorm.community.Post.dto.response.PostInfoRespDto;
 import com.team4.goorm.community.Post.dto.response.PostListRespDto;
+import com.team4.goorm.community.Post.exception.PostException;
 import com.team4.goorm.community.Post.repository.PostLikeRepository;
 import com.team4.goorm.community.Post.repository.PostRepository;
 import com.team4.goorm.community.image.service.AmazonS3Service;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import static com.team4.goorm.community.Post.exception.PostErrorCode.POST_NOT_AUTHORIZED;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -54,15 +56,22 @@ public class PostService {
         return PostInfoRespDto.from(savedPost);
     }
 
-    public void deletePost(Long postId) {
+    public void deletePost(Long postId, String email) {
+        Member member = memberQueryService.findMemberByEmail(email);
         Post post = postQueryService.findById(postId);
+        if (!post.getMember().equals(member)) {
+            throw new PostException(POST_NOT_AUTHORIZED);
+        }
         postRepository.delete(post);
     }
 
-    // request 추가
-    public PostInfoRespDto updatePost(Long postId, PostCreateReqDto request, MultipartFile postImage) {
+    public PostInfoRespDto updatePost(Long postId, PostCreateReqDto request, MultipartFile postImage, String email) {
+        Member member = memberQueryService.findMemberByEmail(email);
         Post post = postQueryService.findById(postId);
         String imageUrl = amazonS3Service.uploadImage(postImage);
+        if (!post.getMember().equals(member)) {
+            throw new PostException(POST_NOT_AUTHORIZED);
+        }
         post.update(request.getTitle(), request.getContent(), imageUrl, request.getCategory());
         return PostInfoRespDto.from(post);
     }

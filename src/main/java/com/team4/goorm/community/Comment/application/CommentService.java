@@ -4,6 +4,8 @@ import com.team4.goorm.community.Comment.domain.Comment;
 import com.team4.goorm.community.Comment.domain.CommentLike;
 import com.team4.goorm.community.Comment.dto.request.CommentCreateReqDto;
 import com.team4.goorm.community.Comment.dto.response.CommentInfoRespDto;
+import com.team4.goorm.community.Comment.exception.CommentErrorCode;
+import com.team4.goorm.community.Comment.exception.CommentException;
 import com.team4.goorm.community.Comment.repository.CommentLikeRepository;
 import com.team4.goorm.community.Comment.repository.CommentRepository;
 import com.team4.goorm.community.Member.application.MemberQueryService;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.team4.goorm.community.Comment.exception.CommentErrorCode.COMMENT_NOT_AUTHORIZED;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -48,12 +51,19 @@ public class CommentService {
     public CommentInfoRespDto updateComment(CommentCreateReqDto request, String user, Long commentId) {
         Member member = memberQueryService.findMemberByEmail(user);
         Comment comment = commentQueryService.findById(commentId);
+        if (!comment.getMember().equals(member)) {
+            throw new CommentException(COMMENT_NOT_AUTHORIZED);
+        }
         comment.update(request.getContent());
         return CommentInfoRespDto.from(comment);
     }
 
     public void deleteComment(String user, Long commentId) {
+        Member member = memberQueryService.findMemberByEmail(user);
         Comment comment = commentQueryService.findById(commentId);
+        if (!comment.getMember().equals(member)) {
+            throw new CommentException(COMMENT_NOT_AUTHORIZED);
+        }
         commentRepository.delete(comment);
     }
 

@@ -1,4 +1,4 @@
-package com.team4.goorm.community.Post.dto.response;
+package com.team4.goorm.community.Post.dto;
 
 import com.team4.goorm.community.Member.domain.Member;
 import com.team4.goorm.community.Member.dto.response.ProfileSummaryDto;
@@ -12,17 +12,14 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Schema(description = "게시글 정보 응답 DTO")
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PostInfoRespDto {
+public class PostSummaryDto {
 
     @Schema(description = "게시글 ID", example = "1")
     private Long postId;
     @Schema(description = "제목", example = "제목")
     private String title;
-    @Schema(description = "내용", example = "내용")
-    private String content;
     @Schema(description = "카테고리", example = "카테고리1")
     private Category category;
     @Schema(description = "게시글 썸네일 URL", example = "http://goorm.com/image.jpg")
@@ -37,10 +34,9 @@ public class PostInfoRespDto {
     private ProfileSummaryDto author;
 
     @Builder
-    public PostInfoRespDto(Long postId, String title, String content, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author) {
+    public PostSummaryDto(Long postId, String title, Category category, String imageUrl, LocalDateTime createdAt, Long likeCount, Long commentCount, ProfileSummaryDto author) {
         this.postId = postId;
         this.title = title;
-        this.content = content;
         this.category = category;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
@@ -49,13 +45,12 @@ public class PostInfoRespDto {
         this.author = author;
     }
 
-    public static PostInfoRespDto from(Post post) {
+    public static PostSummaryDto from(Post post) {
         Member member = post.getMember();
-        return PostInfoRespDto.builder()
+        return PostSummaryDto.builder()
                 .postId(post.getPostId())
                 .author(ProfileSummaryDto.from(member))
                 .title(post.getTitle())
-                .content(post.getContent())
                 .category(post.getCategory())
                 .imageUrl(post.getThumbnailImageUrl())
                 .createdAt(post.getCreatedAt())

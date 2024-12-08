@@ -5,6 +5,7 @@ import com.team4.goorm.community.Post.domain.Post;
 import com.team4.goorm.community.global.common.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,4 +31,25 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+
+    @Builder
+    public Comment(Long commentId, String content, Long likeCount, Member member, Post post) {
+        this.commentId = commentId;
+        this.content = content;
+        this.likeCount = likeCount;
+        this.member = member;
+        this.post = post;
+    }
+
+    public void update(String content) {
+        this.content = content;
+    }
+
+    public void increaseLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decreaseLikeCount() {
+        this.likeCount--;
+    }
 }

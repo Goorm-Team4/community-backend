@@ -8,7 +8,6 @@ import com.team4.goorm.community.auth.dto.response.DuplicateCheckRespDto;
 import com.team4.goorm.community.auth.dto.response.LoginRespDto;
 import com.team4.goorm.community.auth.dto.response.MailVerificationRespDto;
 import com.team4.goorm.community.global.common.dto.SuccessResponse;
-import com.team4.goorm.community.Member.application.MemberQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class AuthController {
 
 	private final AuthService authService;
-	private final MemberQueryService memberQueryService;
 
 	@Operation(summary = "닉네임 중복 검사")
 	@GetMapping("/username/validation")

@@ -25,6 +25,7 @@ public class CorsConfig implements WebMvcConfigurer {
         allowedOriginPatterns.add("https://localhost:8080");
         allowedOriginPatterns.add("http://3.38.209.37:8080");
         allowedOriginPatterns.add("https://3.38.209.37:8080");
+        allowedOriginPatterns.add("https://goormteam4.netlify.app/");
 
         configuration.setAllowedOrigins(allowedOriginPatterns);
         configuration.setAllowedMethods(List.of("HEAD", "POST", "GET", "DELETE", "PUT", "OPTIONS", "PATCH"));
